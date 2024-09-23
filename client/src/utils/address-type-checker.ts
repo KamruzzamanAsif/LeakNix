@@ -16,18 +16,6 @@ const isUrl = (value: string):boolean => {
   return urlPattern.test(value);
 };
 
-// /* Checks if a given string looks like a URL */
-// const isUrl = (value: string):boolean => {
-//   const urlRegex= new RegExp(''
-//     // + /(?:(?:(https?|ftp):)?\/\/)/.source
-//     + /(?:([^:\n\r]+):([^@\n\r]+)@)?/.source
-//     + /(?:(?:www\.)?([^/\n\r]+))/.source
-//     + /(\/[^?\n\r]+)?/.source
-//     + /(\?[^#\n\r]*)?/.source
-//     + /(#?[^\n\r]*)?/.source
-//   );
-//   return urlRegex.test(value);
-// };
 
 /* Checks if a given string looks like an IP Version 4 Address */
 const isIpV4 = (value: string): boolean => {

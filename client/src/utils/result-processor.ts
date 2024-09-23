@@ -1,4 +1,4 @@
-import type { RowProps }  from 'web-check-live/components/Form/Row';
+import type { RowProps }  from '../components/Form/Row';
 
 export interface ServerLocation {
   city: string,

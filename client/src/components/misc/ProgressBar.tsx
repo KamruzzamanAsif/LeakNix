@@ -185,6 +185,7 @@ export interface LoadingJob {
 
 const jobNames = [
   'location',
+  'linked-pages'
 ] as const;
 
 interface JobListItemProps {

@@ -20,7 +20,8 @@ import AdditionalResources from '../components/misc/AdditionalResources';
 import ViewRaw from '../components/misc/ViewRaw';
 
 import ServerLocationCard from '../components/Results/ServerLocation';
-
+import ContentLinksCard from '../components/Results/ContentLinks';
+import OutputConsole from '../components/Results/OutputConsole';
 
 import keys from '../utils/get-keys';
 import { determineAddressType, type AddressType } from '../utils/address-type-checker';
@@ -128,6 +129,7 @@ const Results = (props: { address?: string } ): JSX.Element => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+  
 
   const clearFilters = () => {
     setTags([]);
@@ -196,29 +198,91 @@ const Results = (props: { address?: string } ): JSX.Element => {
   });
   }, [startTime]);
 
+
+  //************************** Start -> <Section: WebSite information Fetching> ***************************// 
+
   const parseJson = (response: Response): Promise<any> => {
     return new Promise((resolve) => {
-        response.json()
-          .then(data => resolve(data))
-          .catch(error => resolve(
-            { error: `Failed to get a valid response 😢\n`
-            + 'This is likely due the target not exposing the required data, '
-            + 'or limitations in imposed by the infrastructure this instance '
-            + 'of Web Check is running on.\n\n'
-            + `Error info:\n${error}`}
-          ));
+      response.json()
+        .then(data => resolve(data))
+        .catch(error => resolve(
+          { error: `Failed to get a valid response 😢\n`
+          + 'This is likely due to the target not exposing the required data, '
+          + 'or limitations imposed by the infrastructure this instance '
+          + 'of LeakNix is running on.\n\n'
+          + `Error info:\n${error}`}
+        ));
     });
   };
 
+  const extractDomain = (url: string): string => {
+    return url.replace(/^https?:\/\//, '').split('/')[0]; // Remove 'http://' or 'https://' and get the domain part
+  };
+  
+  const urlTypeOnly = ['url'] as AddressType[]; // Many jobs only run with these address types
+  
+  
+  // Fetch and parse IP address for given URL
+  const [ipAddress, setIpAddress] = useMotherHook({
+    jobId: 'get-ip',
+    updateLoadingJobs,
+    addressInfo: { address, addressType, expectedAddressTypes: urlTypeOnly },
+    fetchRequest: () => {
+      const domain = extractDomain(address).split(':')[0]; // Extract the domain name & Remove any port numbers after ':' from the domain
+      return fetch(`https://dns.google/resolve?name=${domain}&type=A`)
+        .then(res => parseJson(res))
+        .then(res => {
+          // Check for errors in DNS status
+          if (res.Status !== 0) {
+            console.error(`DNS query failed with status: ${res.Status}`);
+            return `DNS query failed with status: ${res.Status}`;
+          }
+          // Check if the response contains the "Answer" array
+          if (res.Answer && res.Answer.length > 0) {
+            return res.Answer[0].data; // IP address is in the "data" field of the first "Answer"
+          } 
+          else if(domain == "localhost"){
+            return '127.0.0.1'; // IP address of localhost
+          }
+          else {
+            return 'No IP found'; // Handle case where no IP address is returned
+          }
+        });
+    }
+  });
+
+  useEffect(() => {
+    if (!addressType || addressType === 'empt') {
+      setAddressType(determineAddressType(address || ''));
+    }
+    if (addressType === 'ipV4' && address) {
+      setIpAddress(address);
+    }
+  }, [address, addressType, setIpAddress]);
+  
   // Get IP address location info
   const [locationResults, updateLocationResults] = useMotherHook<ServerLocation>({
     jobId: 'location',
     updateLoadingJobs,
-    addressInfo: { address: '103.245.96.147', addressType: 'ipV4', expectedAddressTypes: ['ipV4', 'ipV6'] },
-    fetchRequest: () => fetch(`https://ipapi.co/${'103.245.96.147'}/json/`)
+    addressInfo: { address: ipAddress, addressType: 'ipV4', expectedAddressTypes: ['ipV4', 'ipV6'] },
+    fetchRequest: () => fetch(`https://ipapi.co/${ipAddress}/json/`)
       .then(res => parseJson(res))
       .then(res => getLocation(res)),
   });
+
+
+  // Get list of links included in the page content
+  const [linkedPagesResults, updateLinkedPagesResults] = useMotherHook({
+    jobId: 'linked-pages',
+    updateLoadingJobs,
+    addressInfo: { address, addressType, expectedAddressTypes: urlTypeOnly },
+    fetchRequest: () => fetch(`http://localhost:4000/api/linked-pages?url=${address}`).then(res => parseJson(res)),
+  });
+
+
+
+//************************** End -> <Section: WebSite information Fetching> ***************************// 
+
 
   const makeSiteName = (address: string): string => {
     try {
@@ -237,6 +301,14 @@ const Results = (props: { address?: string } ): JSX.Element => {
       Component: ServerLocationCard,
       refresh: updateLocationResults,
       tags: ['server'],
+    }, 
+    {
+      id: 'linked-pages',
+      title: 'Linked Pages',
+      result: linkedPagesResults,
+      Component: ContentLinksCard,
+      refresh: updateLinkedPagesResults,
+      tags: ['client', 'meta'],
     }
   ];
 
@@ -276,40 +348,6 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 1} />
 
-      <FilterButtons>{ showFilters ? <>
-        <div className="one-half">
-        <span className="group-label">Filter by</span>
-        {['server', 'client', 'meta'].map((tag: string) => (
-          <button
-            key={tag}
-            className={tags.includes(tag) ? 'selected' : ''}
-            onClick={() => updateTags(tag)}>
-              {tag}
-          </button>
-        ))}
-        {(tags.length > 0 || searchTerm.length > 0) && <span onClick={clearFilters} className="clear">Clear Filters</span> }
-        </div>
-        <div className="one-half">
-        <span className="group-label">Search</span>
-        <input 
-          type="text" 
-          placeholder="Filter Results" 
-          value={searchTerm} 
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <span className="toggle-filters" onClick={() => setShowFilters(false)}>Hide</span>
-        </div>
-        </> : (
-          <div className="control-options">
-            <span className="toggle-filters" onClick={() => setShowFilters(true)}>Show Filters</span>
-            <a href="#view-download-raw-data"><span className="toggle-filters">Export Data</span></a>
-            <a href="/about"><span className="toggle-filters">Learn about the Results</span></a>
-            <a href="/about#additional-resources"><span className="toggle-filters">More tools</span></a>
-            <a target="_blank" rel="noreferrer" href="https://github.com/lissy93/web-check"><span className="toggle-filters">View GitHub</span></a>
-          </div>
-      ) }
-      </FilterButtons>
-
       <ResultsContent>
         <Masonry
           breakpointCols={{ 10000: 12, 4000: 9, 3600: 8, 3200: 7, 2800: 6, 2400: 5, 2000: 4, 1600: 3, 1200: 2, 800: 1 }}
@@ -335,6 +373,9 @@ const Results = (props: { address?: string } ): JSX.Element => {
           </Masonry>
       </ResultsContent>
 
+      // Output Console
+      <OutputConsole url={address} />
+      
       <ViewRaw everything={resultCardData} />
       <Footer />
       <Modal isOpen={modalOpen} closeModal={()=> setModalOpen(false)}>{modalContent}</Modal>
