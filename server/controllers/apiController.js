@@ -1,9 +1,10 @@
 // import modules
 const axios = require('axios');
 
+
 // All the api handler methods
 const {dnsHandler} = require('../api-handlers/dns-handler');
-
+const {portHandler} = require('../api-handlers/port-handler');
 
 
 // API method for retrieving DNS records
@@ -56,4 +57,57 @@ exports.getLocationInfo = async (req, res) => {
       console.error('Error retrieving location info:', err.message);
       res.status(500).json({ message: 'Error retrieving location info.', error: err.message });
     }
-  };
+};
+
+
+// API method for getting website screenshot
+exports.getScreenshot = async (req, res) => {
+  try {
+    let url = req.query.url;
+
+    if (!url) {
+      return res.status(400).json({ message: 'URL address is required.' });
+    }
+
+    // Dynamically import capture-website for use
+    // because it doesn't support commonJS import
+    const captureWebsite = await import('capture-website');
+
+    // const screenshot = await captureWebsite.default.file(url, './public/screenshot.png');
+
+    const screenshot = await captureWebsite.default.base64(url);
+    // Send the location data in the response
+    res.status(200).json(screenshot);
+
+  } catch (err) {
+    console.error('Error retrieving website screenshot:', err.message);
+    res.status(500).json({ message: 'Error retrieving website screenshot.', error: err.message });
+  }
+}
+
+
+// API method for getting open and failed ports
+exports.getPorts = async (req, res) => {
+  try {
+      let url = req.query.url;
+      
+      if (!url) {
+          return res.status(400).json({ message: 'URL is required.' });
+      }
+      
+      // Remove protocol (http/https) from URL
+      let domain = url.replace(/(^\w+:|^)\/\//, '');
+      
+      // Call the portsHandler function to check ports
+      const { openPorts, failedPorts } = await portHandler(domain);
+      
+      // Send the result as a JSON response
+      res.status(200).json({ 
+          openPorts, 
+          failedPorts
+      });
+  } catch (err) {
+      console.error('Error checking ports:', err.message);
+      res.status(500).json({ message: 'Error checking ports.', error: err.message });
+  }
+};

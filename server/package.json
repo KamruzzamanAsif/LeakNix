@@ -13,10 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.7",
+    "capture-website": "^4.1.0",
     "cors": "^2.8.5",
     "dns": "^0.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "net": "^1.0.2",
     "util": "^0.12.5"
   },
   "devDependencies": {
