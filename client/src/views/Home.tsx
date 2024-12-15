@@ -13,6 +13,7 @@ import docs from '../utils/docs';
 import colors from '../styles/colors';
 import { determineAddressType } from '../utils/address-type-checker';
 
+
 const HomeContainer = styled.section`
   display: flex;
   flex-direction: column;
@@ -80,14 +81,6 @@ const FixCard = styled.div`
   }
 `;
 
-// const FindIpButton = styled.a`
-//   margin: 0.5rem;
-//   cursor: pointer;
-//   display: block;
-//   text-align: center;
-//   color: ${colors.primary};
-//   text-decoration: underline;
-// `;
 
 const ErrorMessage = styled.p`
   color: ${colors.danger};
@@ -179,7 +172,6 @@ const Home = (): JSX.Element => {
     navigate(`/fix`);
   }
   
-
   /* Update user input state, and hide error message if field is valid */
   const inputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -198,23 +190,6 @@ const Home = (): JSX.Element => {
     event.preventDefault();
     submit();
   }
-
-  // const findIpAddress = () => {
-  //   setUserInput('');
-  //   setPlaceholder('Looking up your IP...');
-  //   setInputDisabled(true);
-  //   fetch('https://ipapi.co/json/')
-  //     .then(function(response) {
-  //       response.json().then(jsonData => {
-  //         setUserInput(jsonData.ip);
-  //         setPlaceholder(defaultPlaceholder);
-  //         setInputDisabled(true);
-  //       });
-  //     })
-  //     .catch(function(error) {
-  //       console.log('Failed to get IP address :\'(', error)
-  //     });
-  // };
 
 
   return (

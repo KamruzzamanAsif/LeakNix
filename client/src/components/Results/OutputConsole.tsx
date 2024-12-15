@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './OutputConsole.css'; // Import the CSS file
 
 // Define the type for the props
 interface OutputConsoleProps {
@@ -47,15 +48,15 @@ const OutputConsole: React.FC<OutputConsoleProps> = ({ url }) => {
   }, [url]); // Re-run only if `url` changes
 
   return (
-    <div>
-      <h2>Output Console</h2>
+    <div className="console-container">
+      <h2 className="console-title">Output Console</h2>
       <textarea
         ref={textareaRef}
         value={output}
         readOnly
         rows={20}
         cols={80}
-        style={{ width: '100%', height: '400px', fontFamily: 'monospace', marginTop: '10px' }}
+        className="console-textarea"
       />
     </div>
   );

@@ -21,6 +21,9 @@ import ViewRaw from '../components/misc/ViewRaw';
 
 import ServerLocationCard from '../components/Results/ServerLocation';
 import ContentLinksCard from '../components/Results/ContentLinks';
+import DnsRecordsCard from '../components/Results/DnsRecords';
+import OpenPortsCard from '../components/Results/OpenPorts';
+import ScreenshotCard from '../components/Results/Screenshot';
 import OutputConsole from '../components/Results/OutputConsole';
 
 import keys from '../utils/get-keys';
@@ -270,7 +273,6 @@ const Results = (props: { address?: string } ): JSX.Element => {
       .then(res => getLocation(res)),
   });
 
-
   // Get list of links included in the page content
   const [linkedPagesResults, updateLinkedPagesResults] = useMotherHook({
     jobId: 'linked-pages',
@@ -279,6 +281,32 @@ const Results = (props: { address?: string } ): JSX.Element => {
     fetchRequest: () => fetch(`http://localhost:4000/api/linked-pages?url=${address}`).then(res => parseJson(res)),
   });
 
+  // Get DNS records
+  const [dnsResults, updateDnsResults] = useMotherHook({
+    jobId: 'dns',
+    updateLoadingJobs,
+    addressInfo: { address, addressType, expectedAddressTypes: urlTypeOnly },
+    fetchRequest: () => fetch(`http://localhost:4000/api/dns-records?url=${address}`).then(res => parseJson(res)),
+  });
+
+  // Check for open ports
+  const [portsResults, updatePortsResults] = useMotherHook({
+    jobId: 'ports',
+    updateLoadingJobs,
+    addressInfo: { address: ipAddress, addressType: 'ipV4', expectedAddressTypes: ['ipV4', 'ipV6'] },
+    fetchRequest: () => fetch(`http://localhost:4000/api/check-ports?url=${address}`)
+      .then(res => parseJson(res)),
+  });
+
+   // Take a screenshot of the website
+   const [screenshotResult, updateScreenshotResult] = useMotherHook({
+    jobId: 'screenshot',
+    updateLoadingJobs,
+    addressInfo: { address, addressType, expectedAddressTypes: urlTypeOnly },
+    fetchRequest: () =>
+      fetch(`http://localhost:4000/api/screenshot?url=${address}`)
+        .then(res => parseJson(res)),
+  });
 
 
 //************************** End -> <Section: WebSite information Fetching> ***************************// 
@@ -309,7 +337,31 @@ const Results = (props: { address?: string } ): JSX.Element => {
       Component: ContentLinksCard,
       refresh: updateLinkedPagesResults,
       tags: ['client', 'meta'],
-    }
+    },
+    {
+      id: 'dns',
+      title: 'DNS Records',
+      result: dnsResults,
+      Component: DnsRecordsCard,
+      refresh: updateDnsResults,
+      tags: ['server'],
+    },
+    {
+      id: 'ports',
+      title: 'Open Ports',
+      result: portsResults,
+      Component: OpenPortsCard,
+      refresh: updatePortsResults,
+      tags: ['server'],
+    },
+    {
+      id: 'screenshot',
+      title: 'Screenshot',
+      result: screenshotResult,
+      Component: ScreenshotCard,
+      refresh: updateScreenshotResult,
+      tags: ['client', 'meta'],
+    }, 
   ];
 
   const makeActionButtons = (title: string, refresh: () => void, showInfo: (id: string) => void): ReactNode => {
@@ -346,7 +398,7 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} />
 
-      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 1} />
+      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
 
       <ResultsContent>
         <Masonry
