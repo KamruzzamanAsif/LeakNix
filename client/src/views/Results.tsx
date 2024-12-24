@@ -398,7 +398,7 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} />
 
-      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
+      
 
       <ResultsContent>
         <Masonry
@@ -410,13 +410,14 @@ const Results = (props: { address?: string } ): JSX.Element => {
             .map(({ id, title, result, tags, refresh, Component }, index: number) => {
               const show = (tags.length === 0 || tags.some(tag => tags.includes(tag)))
               && title.toLowerCase().includes(searchTerm.toLowerCase())
-              && (result && !result.error);
+              // && (result && !result.error);
               return show ? (
                 <ErrorBoundary title={title} key={`eb-${index}`}>
                   <Component
                     key={`${title}-${index}`}
                     data={{...result}}
                     title={title}
+                    url={""}
                     actionButtons={refresh ? makeActionButtons(title, refresh, () => showInfo(id)) : undefined}
                   />
                 </ErrorBoundary>
@@ -425,8 +426,10 @@ const Results = (props: { address?: string } ): JSX.Element => {
           </Masonry>
       </ResultsContent>
 
+      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
+
       // Output Console
-      <OutputConsole url={address} />
+      {/* <OutputConsole url={address} /> */}
       
       <ViewRaw everything={resultCardData} />
       <Footer />
