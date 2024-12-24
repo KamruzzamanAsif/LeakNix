@@ -15,13 +15,8 @@ app.use(express.json()); // Body parser
 app.use(cors());
 
 
-// DB connection
-TODO: 'Work with Database'
-
-
 // Routes
 app.use('/api', apiRoutes);
-
 
 
 // web socket connection

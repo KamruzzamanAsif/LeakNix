@@ -5,6 +5,8 @@ const urlLib = require('url');
 const Detector = require('technology-detector-node');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+
 
 // All the api handler methods
 const {dnsHandler} = require('../api-handlers/dns-handler');
@@ -245,4 +247,51 @@ exports.getPorts = async (req, res) => {
       console.error('Error checking ports:', err.message);
       res.status(500).json({ message: 'Error checking ports.', error: err.message });
   }
+};
+
+
+
+// API method for uploading Scenario File
+
+// Configure Multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, '../uploads'); // Define upload directory
+    // if not exists, create the directory
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const timestamp = Date.now();
+    const originalName = file.originalname;
+    const sanitizedFilename = "custom-scenario.mjs"; 
+    cb(null, `${sanitizedFilename}`);
+  },
+});
+
+const upload = multer({ storage });
+
+exports.getUploadScenarioFile = async (req, res) => {
+  upload.single('scenarioFile')(req, res, (err) => {
+    if (err) {
+      console.error('File upload error:', err.message);
+      return res.status(500).json({ message: 'Error uploading scenario file', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const filePath = req.file.path;
+    console.log('File uploaded successfully:', filePath);
+
+    // Send success response with file details
+    res.status(200).json({
+      message: 'File uploaded successfully',
+      filePath,
+      fileName: req.file.filename,
+    });
+  });
 };

@@ -9,4 +9,6 @@ router.get('/technologies', apiController.getTechnologies);
 router.get('/screenshot', apiController.getScreenshot);
 router.get('/check-ports', apiController.getPorts);
 
+router.post('/upload-scenario-file', apiController.getUploadScenarioFile);
+
 module.exports = router;
