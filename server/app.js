@@ -19,6 +19,10 @@ app.use(cors());
 app.use('/api', apiRoutes);
 
 
+// Serve static files from the public folder
+app.use(express.static('public'));
+
+
 // web socket connection
 const wss = new WebSocket.Server({ port: 4001 });
 wss.on('connection', (ws) => {
@@ -36,7 +40,7 @@ wss.on('connection', (ws) => {
       }
 
       // Start the child process using the provided URL
-      const childProcess = spawn('node', ['C:\\Users\\DELL\\Desktop\\fuite\\src\\cli.js', url]);
+      const childProcess = spawn('node', ['C:\\Deep Learning\\fuite\\src\\cli.js', '--scenario', 'C:\\Deep Learning\\fuite\\src\\myScenario.mjs', url]);
 
       // Notify the client that execution has started
       ws.send('Starting execution...');
