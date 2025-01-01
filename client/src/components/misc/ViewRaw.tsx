@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import colors from '../../styles/colors';
 import { Card } from '../Form/Card';
 import Button from '../Form/Button';
+import { useState } from 'react';
 
 const CardStyles = `
 margin: 0 auto 1rem auto;
@@ -39,15 +39,23 @@ const StyledIframe = styled.iframe`
   background: ${colors.background};
 `;
 
-const ViewRaw = (props: { everything: { id: string, result: any}[] }) => {
+const ViewRaw = (props: { jsonData: any[] }) => {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("Given: " + props.jsonData);
+  // This function processes the jsonData to return an object
   const makeResults = () => {
-    const result: {[key: string]: any} = {};
-    props.everything.forEach((item: {id: string, result: any}) => {
-      result[item.id] = item.result;
-    });
+    const result: { [key: string]: any } = {};
+  
+    if (Array.isArray(props.jsonData)) {
+      props.jsonData.forEach((item, index) => {
+        result[`test_${index + 1}`] = item; // Use index as the key
+      });
+    } else {
+      console.error('jsonData is not a valid array of objects:', props.jsonData);
+    }
+  
     return result;
   };
 
@@ -78,7 +86,7 @@ const ViewRaw = (props: { everything: { id: string, result: any}[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'web-check-results.json';
+    link.download = 'leaknix-results.json';
     link.click();
     URL.revokeObjectURL(url);
   }

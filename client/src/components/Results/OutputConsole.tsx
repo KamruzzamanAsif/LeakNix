@@ -1,51 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './OutputConsole.css'; // Import the CSS file
 
-// Define the type for the props
 interface OutputConsoleProps {
   url: string;
+  onJsonDataReceived: (data: any) => void; // Callback to pass JSON data to parent or other components
 }
 
-const OutputConsole: React.FC<OutputConsoleProps> = ({ url }) => {
-  const [output, setOutput] = useState<string>('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const wsRef = useRef<WebSocket | null>(null); // WebSocket instance
+const OutputConsole: React.FC<OutputConsoleProps> = ({ url, onJsonDataReceived }) => {
+  const [output, setOutput] = useState<string>(''); // Stores console output
+  const textareaRef = useRef<HTMLTextAreaElement>(null); // Ref for auto-scroll
+  const wsRef = useRef<WebSocket | null>(null); // WebSocket reference
 
   useEffect(() => {
-    // Ensure a new WebSocket connection is only created once
+    // Connect to WebSocket server
     const ws = new WebSocket('ws://localhost:4001');
     wsRef.current = ws;
 
     ws.onopen = () => {
-      setOutput((prevOutput) => prevOutput + 'Connected to server\n');
-      // Send the URL to the server once the connection is open
+      setOutput((prev) => prev + 'Connected to WebSocket server\n');
+      // Send the URL to the server
       ws.send(JSON.stringify({ url }));
     };
 
     ws.onmessage = (event: MessageEvent) => {
-      setOutput((prevOutput) => {
-        const newOutput = prevOutput + event.data + '\n';
-        if (textareaRef.current) {
-          textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+      try {
+        const data = JSON.parse(event.data);
+
+        // If JSON file content is received
+        if (data.fileContent) {
+          const jsonData = JSON.parse(data.fileContent); // Parse the JSON
+          onJsonDataReceived(jsonData); // Pass it to the parent or other components
+          setOutput((prev) => prev + 'JSON file content received\n');
+        } else {
+          // Handle regular messages
+          setOutput((prev) => {
+            const newOutput = prev + event.data + '\n';
+            if (textareaRef.current) {
+              textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Auto-scroll
+            }
+            return newOutput;
+          });
         }
-        return newOutput;
-      });
+      } catch {
+        // Handle regular messages
+        setOutput((prev) => {
+          const newOutput = prev + event.data + '\n';
+          if (textareaRef.current) {
+            textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Auto-scroll
+          }
+          return newOutput;
+        });
+      }
     };
 
     ws.onclose = () => {
-      setOutput((prevOutput) => prevOutput + 'Disconnected from server\n');
+      setOutput((prev) => prev + 'WebSocket connection closed\n');
     };
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
-      setOutput((prevOutput) => prevOutput + 'WebSocket error occurred\n');
+      setOutput((prev) => prev + 'WebSocket encountered an error\n');
     };
 
-    // Cleanup WebSocket connection on component unmount
     return () => {
+      // Clean up the WebSocket connection
       ws.close();
     };
-  }, [url]); // Re-run only if `url` changes
+  }, [url]);
 
   return (
     <div className="console-container">

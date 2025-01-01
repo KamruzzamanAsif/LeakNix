@@ -309,6 +309,15 @@ const Results = (props: { address?: string } ): JSX.Element => {
   });
 
 
+  // Get the output json data from the server
+  const [jsonData, setJsonData] = useState<any>(null); // State to store JSON data
+
+  const handleJsonDataReceived = (data: any) => {
+    setJsonData(data);
+    console.log('JSON Data:', data); // Use it across components
+  };
+
+
 //************************** End -> <Section: WebSite information Fetching> ***************************// 
 
 
@@ -429,9 +438,10 @@ const Results = (props: { address?: string } ): JSX.Element => {
       
 
       // Output Console
-      <OutputConsole url={address} />
+      <OutputConsole url={address} onJsonDataReceived={handleJsonDataReceived}/>
+
       
-      <ViewRaw everything={resultCardData} />
+      <ViewRaw jsonData={jsonData} />
       <Footer />
       <Modal isOpen={modalOpen} closeModal={()=> setModalOpen(false)}>{modalContent}</Modal>
       <ToastContainer limit={3} draggablePercent={60} autoClose={2500} theme="dark" position="bottom-right" />

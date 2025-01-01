@@ -5,6 +5,8 @@ const cors = require('cors');
 const apiRoutes = require('./routes/apiRoutes');
 const WebSocket = require('ws'); // Import the ws library
 const { spawn } = require('child_process'); // Assuming you need this for the child process
+const path = require('path');
+const fs = require('fs');
 
 // Load .env
 dotenv.config(); 
@@ -40,7 +42,7 @@ wss.on('connection', (ws) => {
       }
 
       // Start the child process using the provided URL
-      const childProcess = spawn('node', ['C:\\Deep Learning\\fuite\\src\\cli.js', '--scenario', 'C:\\Deep Learning\\fuite\\src\\myScenario.mjs', url]);
+      const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\myScenario.mjs', '--output', 'fuite\\output', url]);
 
       // Notify the client that execution has started
       ws.send('Starting execution...');
@@ -63,7 +65,24 @@ wss.on('connection', (ws) => {
       childProcess.on('close', (code) => {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(`Execution completed with code ${code}.`);
-          ws.close(); // Optionally close the WebSocket connection
+
+          // Read JSON file after process completes
+          const jsonFilePath = path.resolve('fuite/output');
+          fs.readFile(jsonFilePath, 'utf8', (err, data) => {
+            if (err) {
+              ws.send(`Error reading JSON file: ${err.message}`);
+            } else {
+              ws.send(JSON.stringify({ fileContent: data }));
+              // console.log(JSON.stringify({ fileContent: data }));
+              console.log("output json file sent successfully")
+            }
+          });
+
+           // Send the final "end signal"
+          setTimeout(() => {
+            ws.send('Execution finished. Closing WebSocket.');
+            ws.close();
+          }, 50);
         }
       });
 
