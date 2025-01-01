@@ -1,0 +1,80 @@
+{
+  "name": "fuite",
+  "version": "5.0.4",
+  "description": "A tool for finding memory leaks in web apps",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "bin": "./src/cli.cjs",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "types": "./types/index.d.ts",
+  "files": [
+    "src",
+    "types"
+  ],
+  "scripts": {
+    "test": "run-p --race test:serve test:runner",
+    "test:serve": "serve --no-request-logging",
+    "test:runner": "node --test ./test/spec/*.test.js",
+    "lint": "standard",
+    "version": "run-s version:changelog version:add",
+    "version:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "version:add": "git add CHANGELOG.md"
+  },
+  "dependencies": {
+    "as-table": "^1.0.55",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "exit-hook": "4.0.0",
+    "ono": "^7.1.3",
+    "ora": "^8.1.0",
+    "please-upgrade-node": "^3.2.0",
+    "pretty-bytes": "^6.1.1",
+    "puppeteer": "^23.6.0",
+    "quick-lru": "^7.0.0",
+    "source-map": "^0.7.4",
+    "stacktrace-parser": "^0.1.10",
+    "table": "^6.8.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-inject": "^5.0.5",
+    "@rollup/plugin-replace": "^6.0.1",
+    "@rollup/plugin-strip": "^3.0.4",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@rollup/plugin-virtual": "^3.0.2",
+    "chai": "^5.1.2",
+    "conventional-changelog-cli": "^5.0.0",
+    "navigo": "^8.11.1",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^4.24.0",
+    "serve": "^14.2.4",
+    "standard": "^17.1.2",
+    "wait-for-localhost": "^4.1.0"
+  },
+  "keywords": [
+    "memory",
+    "leak",
+    "detector"
+  ],
+  "author": "Nolan Lawson <nolan@nolanlawson.com>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nolanlawson/fuite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nolanlawson/fuite/issues"
+  },
+  "homepage": "https://github.com/nolanlawson/fuite#readme",
+  "engines": {
+    "node": ">= 18.0.0"
+  },
+  "standard": {
+    "ignore": [
+      "thirdparty"
+    ]
+  },
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+}

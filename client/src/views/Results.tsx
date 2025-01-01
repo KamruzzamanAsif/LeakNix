@@ -396,9 +396,9 @@ const Results = (props: { address?: string } ): JSX.Element => {
         }
       </Nav>
 
-      <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} />
+      {/* <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} /> */}
 
-      
+      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
 
       <ResultsContent>
         <Masonry
@@ -426,10 +426,10 @@ const Results = (props: { address?: string } ): JSX.Element => {
           </Masonry>
       </ResultsContent>
 
-      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
+      
 
       // Output Console
-      {/* <OutputConsole url={address} /> */}
+      <OutputConsole url={address} />
       
       <ViewRaw everything={resultCardData} />
       <Footer />

@@ -14,7 +14,7 @@ const cardStyles = `
 
 const ScreenshotCard = (props: { url: string, title: string, actionButtons: any }): JSX.Element => {
   // TODO: Minio image handling implementation
-  const imageUrl = props.url || "http://localhost:4000/public/screenshots/screenshot.png";
+  const imageUrl = props.url || "http://localhost:4000/screenshots/screenshot.png";
   console.log("Image url:", imageUrl);
   console.log("Title:", props.title);
   return (
