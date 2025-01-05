@@ -27,6 +27,8 @@ import ScreenshotCard from '../components/Results/Screenshot';
 import OutputConsole from '../components/Results/OutputConsole';
 import AGgrid from '../components/Results/AGgrid';
 import GridCard from '../components/Results/GridCard';
+import Overview from '../components/Results/Overview';
+import OverviewCard from '../components/Results/OverviewCard';
 
 import keys from '../utils/get-keys';
 import { determineAddressType, type AddressType } from '../utils/address-type-checker';
@@ -442,12 +444,14 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       // Output Console
       <OutputConsole url={address} onJsonDataReceived={handleJsonDataReceived}/>
+
+      <ResultsContent>
+        <OverviewCard title='Overview'/>
+      </ResultsContent>
       
       <ResultsContent>
         <GridCard title='Result Table Summary'/>
       </ResultsContent>
-      
-      
       
       <ViewRaw jsonData={jsonData} />
       <Footer />
