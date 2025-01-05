@@ -25,6 +25,8 @@ import DnsRecordsCard from '../components/Results/DnsRecords';
 import OpenPortsCard from '../components/Results/OpenPorts';
 import ScreenshotCard from '../components/Results/Screenshot';
 import OutputConsole from '../components/Results/OutputConsole';
+import AGgrid from '../components/Results/AGgrid';
+import GridCard from '../components/Results/GridCard';
 
 import keys from '../utils/get-keys';
 import { determineAddressType, type AddressType } from '../utils/address-type-checker';
@@ -36,11 +38,12 @@ import {
   parseShodanResults, type ShodanResults
 } from '../utils/result-processor';
 
+
 const ResultsOuter = styled.div`
   display: flex;
   flex-direction: column;
   .masonry-grid {
-    display: flex;
+    display: flGridCard.propTypes.propTypes.propTypes.propTypes.propTypes
     width: auto;
   }
   .masonry-grid-col section { margin: 1rem 0.5rem; }
@@ -439,7 +442,12 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       // Output Console
       <OutputConsole url={address} onJsonDataReceived={handleJsonDataReceived}/>
-
+      
+      <ResultsContent>
+        <GridCard title='Result Table Summary'/>
+      </ResultsContent>
+      
+      
       
       <ViewRaw jsonData={jsonData} />
       <Footer />
