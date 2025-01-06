@@ -185,7 +185,10 @@ export interface LoadingJob {
 
 const jobNames = [
   'location',
-  'linked-pages'
+  'linked-pages',
+  'dns',
+  'screenshot',
+  'ports',
 ] as const;
 
 interface JobListItemProps {
@@ -419,7 +422,7 @@ const ProgressLoader = (props: { loadStatus: LoadingJob[], showModal: (err: Reac
           It's normal for some jobs to fail, either because the host doesn't return the required info,
           or restrictions in the lambda function, or hitting an API limit.
         </p>}
-        <AboutPageLink href="/check/about" target="_blank" rel="noreferer" >Learn More about Web-Check</AboutPageLink>
+        <AboutPageLink href="/check/about" target="_blank" rel="noreferer" >Learn More about LeakNix</AboutPageLink>
     </Details>
     <DismissButton onClick={() => setHideLoader(true)}>Dismiss</DismissButton>
   </LoadCard>

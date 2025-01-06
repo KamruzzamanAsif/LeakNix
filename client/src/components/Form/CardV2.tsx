@@ -15,7 +15,7 @@ export const StyledCard = styled.section<{ styles?: string }>`
   margin: 0.5rem auto; /* Center horizontally */
   max-height: 64rem;
   overflow: auto;
-  width: 95%;
+  width: 98%;
   display: flex; /* Ensures the content is treated as a flex container */
   justify-content: center; /* Center content horizontally */
   align-items: center; /* Center content vertically */

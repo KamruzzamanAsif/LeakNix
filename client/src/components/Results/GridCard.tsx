@@ -104,7 +104,7 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
         test: test_name,
         type,
         addedCount: deltaPerIteration,
-        preview,
+        preview: preview,
         sizeIncreasedAt: stacktraces[0]?.pretty?.split("\n")[0]?.trim() || "N/A",
       }));
       collections_data = collections_data.concat(collections);

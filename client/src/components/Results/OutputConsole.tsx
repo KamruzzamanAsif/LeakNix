@@ -9,6 +9,7 @@ interface OutputConsoleProps {
 
 const OutputConsole: React.FC<OutputConsoleProps> = ({ url, scenario_used, onJsonDataReceived }) => {
   const [output, setOutput] = useState<string>(''); // Stores console output
+  const [expanded, setExpanded] = useState<boolean>(false); // Track expanded state
   const textareaRef = useRef<HTMLTextAreaElement>(null); // Ref for auto-scroll
   const wsRef = useRef<WebSocket | null>(null); // WebSocket reference
 
@@ -69,17 +70,24 @@ const OutputConsole: React.FC<OutputConsoleProps> = ({ url, scenario_used, onJso
     };
   }, [url]);
 
+  const toggleExpand = () => setExpanded((prev) => !prev);
+
   return (
-    <div className="console-container">
-      <h2 className="console-title">Output Console</h2>
-      <textarea
-        ref={textareaRef}
-        value={output}
-        readOnly
-        rows={20}
-        cols={80}
-        className="console-textarea"
-      />
+    <div className={`console-container ${expanded ? 'expanded' : 'collapsed'}`}>
+      <div className="console-header">
+        <button className="toggle-button" onClick={toggleExpand}>
+          {expanded ? '▲ Collapse' : '▼ Expand'}
+        </button>
+      </div>
+      {expanded && (
+        <textarea
+          ref={textareaRef}
+          value={output}
+          readOnly
+          rows={10} // Fixed number of rows
+          className="console-textarea"
+        />
+      )}
     </div>
   );
 };

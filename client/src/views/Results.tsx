@@ -29,6 +29,7 @@ import AGgrid from '../components/Results/AGgrid';
 import GridCard from '../components/Results/GridCard';
 import Overview from '../components/Results/Overview';
 import OverviewCard from '../components/Results/OverviewCard';
+import OutputConsoleCard from '../components/Results/OutputConsoleCard';
 
 import keys from '../utils/get-keys';
 import { determineAddressType, type AddressType } from '../utils/address-type-checker';
@@ -142,6 +143,10 @@ const Results = (props: { address?: string} ): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
   
+  // we will stop the loader if overview card rendered successfully
+  const [isOverviewRendered, setIsOverviewRendered] = useState(false); // Tracks if OverviewCard is rendered
+  const [loading, setLoading] = useState(true); // Tracks if loader should show
+
 
   const clearFilters = () => {
     setTags([]);
@@ -270,7 +275,10 @@ const Results = (props: { address?: string} ): JSX.Element => {
     if (addressType === 'ipV4' && address) {
       setIpAddress(address);
     }
-  }, [address, addressType, setIpAddress]);
+    if (isOverviewRendered) {
+      setLoading(false); // Stop the loader when OverviewCard is rendered
+    }
+  }, [address, addressType, setIpAddress, isOverviewRendered]);
   
   // Get IP address location info
   const [locationResults, updateLocationResults] = useMotherHook<ServerLocation>({
@@ -414,11 +422,18 @@ const Results = (props: { address?: string} ): JSX.Element => {
         }
       </Nav>
 
-      {/* <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} /> */}
+      <ProgressBar loadStatus={loadingJobs} showModal={showErrorModal} showJobDocs={showInfo} />
 
-      <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} />
 
+      {/* <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} /> */}
+      {loading && <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10}/>} {/* Show loader until isOverviewRendered is true */}
+      
+      // Output Console
       <ResultsContent>
+        {scenario !== undefined && <OutputConsoleCard title='Console Output' url={address} scenario_used={scenario} onJsonDataReceived={handleJsonDataReceived}/>}
+      </ResultsContent>
+      
+      {/* <ResultsContent>
         <Masonry
           breakpointCols={{ 10000: 12, 4000: 9, 3600: 8, 3200: 7, 2800: 6, 2400: 5, 2000: 4, 1600: 3, 1200: 2, 800: 1 }}
           className="masonry-grid"
@@ -442,15 +457,12 @@ const Results = (props: { address?: string} ): JSX.Element => {
             ) : null})
           }
           </Masonry>
-      </ResultsContent>
+      </ResultsContent> */}
 
-      
-
-      // Output Console
-      {scenario !== undefined && <OutputConsole url={address} scenario_used={scenario} onJsonDataReceived={handleJsonDataReceived}/>}
-      
       <ResultsContent>
-        {jsonData && <OverviewCard title='Overview' data={jsonData} />}
+        {jsonData && <OverviewCard title='Overview' data={jsonData} 
+          onRenderComplete={() => setIsOverviewRendered(true)} // Trigger when OverviewCard is rendered
+        />}
       </ResultsContent>
       
       

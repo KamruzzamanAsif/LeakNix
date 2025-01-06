@@ -1,7 +1,6 @@
 import { Card } from '../../components/Form/CardV3';
 import colors from '../../styles/colors';
-import Overview from './Overview';
-import { useEffect } from 'react';
+import OutputConsole from './OutputConsole';
 
 const cardStyles = `
   small { 
@@ -47,16 +46,12 @@ const cardStyles = `
 
 
 
-const OverviewCard = (props: { title: string, data: any, onRenderComplete: () => void}): JSX.Element => {
-  useEffect(() => {
-    props.onRenderComplete(); // Notify the parent that rendering is complete
-  }, [props.onRenderComplete]);
-
+const OutputConsoleCard = (props: { title: string, url: string, scenario_used: boolean, onJsonDataReceived: (data: any) => void}): JSX.Element => {
   return (
     <Card heading={props.title} styles={cardStyles}>
-      <Overview jsonData={props.data}/>
+      <OutputConsole url={props.url} scenario_used={props.scenario_used} onJsonDataReceived={props.onJsonDataReceived}/>
     </Card>
   );
 }
 
-export default OverviewCard;
+export default OutputConsoleCard;
