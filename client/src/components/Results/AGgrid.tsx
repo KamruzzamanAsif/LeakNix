@@ -81,7 +81,7 @@ const AGgrid = ({
       type: collection.type,
       addedCount: collection.addedCount,
       retainedSize: 'N/A',
-      details: 'Preview: ' + collection.prview
+      details: 'Preview: ' + collection.preview + '\n' + "Size Increased At: " + collection.sizeIncreasedAt,
     }));
 
     return [...objects, ...eventListeners, ...domNodes, ...collections];
@@ -105,6 +105,8 @@ const AGgrid = ({
       filter: true,
       sortable: true,
       resizable: true,
+      autoHeight: true,
+      cellStyle: { whiteSpace: 'normal', lineHeight: '1.5' }, // CSS for wrapping
     };
   }, []);
 

@@ -100,11 +100,12 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
 
     data.forEach((entry: any) => {
       const test_name = `Test ${testCounter++}`;
-      const collections = entry?.result?.leaks?.collections.map(({ type, deltaPerIteration, preview }) => ({
+      const collections = entry?.result?.leaks?.collections.map(({ type, deltaPerIteration, preview, stacktraces }) => ({
         test: test_name,
         type,
         addedCount: deltaPerIteration,
         preview,
+        sizeIncreasedAt: stacktraces[0]?.pretty?.split("\n")[0]?.trim() || "N/A",
       }));
       collections_data = collections_data.concat(collections);
     });
