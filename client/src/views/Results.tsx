@@ -446,12 +446,14 @@ const Results = (props: { address?: string } ): JSX.Element => {
       <OutputConsole url={address} onJsonDataReceived={handleJsonDataReceived}/>
 
       <ResultsContent>
-        <OverviewCard title='Overview'/>
+        {jsonData && <OverviewCard title='Overview' data={jsonData} />}
       </ResultsContent>
+
       
       <ResultsContent>
         <GridCard title='Result Table Summary'/>
       </ResultsContent>
+      
       
       <ViewRaw jsonData={jsonData} />
       <Footer />

@@ -33,12 +33,12 @@ const cardStyles = `
 `;
 
 
-const GridCard = (props: { title: string}): JSX.Element => {
+const OverviewCard = (props: { title: string, data: any}): JSX.Element => {
   return (
     <Card heading={props.title} styles={cardStyles}>
-      <Overview/>
+      <Overview jsonData={props.data}/>
     </Card>
   );
 }
 
-export default GridCard;
+export default OverviewCard;
