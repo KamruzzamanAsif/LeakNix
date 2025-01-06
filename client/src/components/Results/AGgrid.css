@@ -33,8 +33,8 @@
     --ag-selected-row-background-color: #3A3B45;
     --ag-selected-row-text-color: #FFFFFF;
     --ag-input-border-color: #50F178;
-    --ag-input-background-color: #21222C;
-    --ag-input-text-color: #50F178;
+    --ag-input-background-color: #e8e9f1;
+    --ag-input-text-color: #1b1d1b;
     --ag-button-background-color: #50F178;
     --ag-button-border-color: #429356;
     --ag-button-text-color: #21222C;
@@ -46,4 +46,11 @@
     --ag-wrapper-border-width: 1px;
     --ag-wrapper-border-color: #429356;
     --ag-wrapper-border-radius: 0;
+}
+
+
+.ag-input {
+    color: #FFFFFF; /* White text for visibility */
+    background-color: #21222C; /* Dark background */
+    border: 1px solid var(--ag-input-border-color);
 }

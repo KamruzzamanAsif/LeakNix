@@ -2,9 +2,6 @@
 const Overview = (jsonData: any) => {
 
     const calculateTotals = (data: any) => {
-        console.log("jsonData:", jsonData);
-        console.log("Is jsonData an array?", Array.isArray(jsonData));
-
         let totalCollections = 0;
         let totalEventListeners = 0;
         let totalDomNodes = 0;

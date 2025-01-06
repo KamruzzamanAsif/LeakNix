@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, type ReactNode } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, json } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ToastContainer } from 'react-toastify';
 import Masonry from 'react-masonry-css'
@@ -451,7 +451,8 @@ const Results = (props: { address?: string } ): JSX.Element => {
 
       
       <ResultsContent>
-        <GridCard title='Result Table Summary'/>
+        {jsonData && <GridCard title='Result Table Summary' data={jsonData}/>}
+        {/* <GridCard title='Result Table Summary' data={jsonData}/> */}
       </ResultsContent>
       
       
