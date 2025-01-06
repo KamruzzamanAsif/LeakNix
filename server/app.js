@@ -35,6 +35,8 @@ wss.on('connection', (ws) => {
     try {
       const clientData = JSON.parse(message);
       const url = clientData.url;
+      const scenario_used = clientData.scenario_used;
+      console.log("scenario used:" ,scenario_used)
 
       if (!url) {
         ws.send('No URL provided');
@@ -42,7 +44,25 @@ wss.on('connection', (ws) => {
       }
 
       // Start the child process using the provided URL
-      const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\myScenario.mjs', '--output', 'fuite\\output', url]);
+      // const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\custom-scenario.mjs', '--output', 'fuite\\output', url]);
+      // if(scenario_used){
+      //   const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\custom-scenario.mjs', '--output', 'fuite\\output', url]);
+      // }
+      // else{
+      //   const childProcess = spawn('node', ['fuite\\src\\cli.js', '--output', 'fuite\\output', url]);
+      // }
+
+      // Build the arguments array dynamically
+      const args = ['fuite\\src\\cli.js'];
+
+      if (scenario_used) {
+        args.push('--scenario', 'fuite\\src\\custom-scenario.mjs');
+      }
+
+      args.push('--output', 'fuite\\output', url);
+
+      // Start the child process using the constructed arguments array
+      const childProcess = spawn('node', args);
 
       // Notify the client that execution has started
       ws.send('Starting execution...');
@@ -93,6 +113,7 @@ wss.on('connection', (ws) => {
       });
     } catch (error) {
       ws.send('Invalid message format');
+      ws.close();
     }
   });
 });

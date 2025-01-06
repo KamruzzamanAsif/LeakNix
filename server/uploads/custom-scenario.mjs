@@ -26,13 +26,13 @@ export async function createTests(page) {
         },
         description: "Go to /page1 and back"
       },
-      {
-        data: {
-          href: "/page2",
-          fullHref: "http://localhost:3000/page2"
-        },
-        description: "Go to /page2 and back"
-      }
+      // {
+      //   data: {
+      //     href: "/page2",
+      //     fullHref: "http://localhost:3000/page2"
+      //   },
+      //   description: "Go to /page2 and back"
+      // }
     ];
 }
 

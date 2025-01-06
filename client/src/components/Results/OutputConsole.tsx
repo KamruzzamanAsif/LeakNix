@@ -3,10 +3,11 @@ import './OutputConsole.css';
 
 interface OutputConsoleProps {
   url: string;
+  scenario_used: boolean;
   onJsonDataReceived: (data: any) => void; // Callback to pass JSON data to parent or other components
 }
 
-const OutputConsole: React.FC<OutputConsoleProps> = ({ url, onJsonDataReceived }) => {
+const OutputConsole: React.FC<OutputConsoleProps> = ({ url, scenario_used, onJsonDataReceived }) => {
   const [output, setOutput] = useState<string>(''); // Stores console output
   const textareaRef = useRef<HTMLTextAreaElement>(null); // Ref for auto-scroll
   const wsRef = useRef<WebSocket | null>(null); // WebSocket reference
@@ -19,7 +20,7 @@ const OutputConsole: React.FC<OutputConsoleProps> = ({ url, onJsonDataReceived }
     ws.onopen = () => {
       setOutput((prev) => prev + 'Connected to WebSocket server\n');
       // Send the URL to the server
-      ws.send(JSON.stringify({ url }));
+      ws.send(JSON.stringify({ url, scenario_used }));
     };
 
     ws.onmessage = (event: MessageEvent) => {

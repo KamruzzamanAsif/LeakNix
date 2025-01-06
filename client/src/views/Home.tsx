@@ -130,15 +130,66 @@ const SiteFeaturesWrapper = styled(StyledCard)`
   }
 `;
 
+const FileUploadWrapper = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  label {
+    font-size: 1rem;
+    color: ${colors.textColor};
+    margin-bottom: 0.5rem;
+    padding-right: 2rem;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  .upload-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    color: ${colors.textColor};
+    background: ${colors.backgroundLighter};
+    border: 1px solid ${colors.primary};
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    &:hover {
+      background: ${colors.primary};
+      color: ${colors.backgroundLighter};
+    }
+  }
+`;
+
+
 const Home = (): JSX.Element => {
   const defaultPlaceholder = 'e.g. https://dsse.iit.du.ac.bd';
   const [userInput, setUserInput] = useState('');
   const [errorMsg, setErrMsg] = useState('');
   const [placeholder] = useState(defaultPlaceholder);
   const [inputDisabled] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const location = useLocation();
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      const isMjsFile = file.name.endsWith('.mjs');
+      if (!isMjsFile) {
+        setFileError('Please upload a valid .mjs file.');
+        setSelectedFile(null); // Reset the file state if invalid
+      } else {
+        setFileError(null); // Clear any previous error
+        setSelectedFile(file);
+        console.log(`Selected file: ${file.name}`);
+      }
+    }
+  };
 
   /* Redirect strait to results, if somehow we land on /check?url=[] */
   useEffect(() => {
@@ -150,9 +201,11 @@ const Home = (): JSX.Element => {
   }, [navigate, location.search]);
 
   /* Check is valid address, either show err or redirect to results page */
-  const submit = () => {
+  const submit = (custom_scenario:boolean) => {
     let address = userInput.endsWith("/") ? userInput.slice(0, -1) : userInput;
     const addressType = determineAddressType(address);
+    console.log('Sending custom scenario: ', custom_scenario);
+    const scenario = custom_scenario;
   
     if (addressType === 'empt') {
       setErrMsg('Field must not be empty');
@@ -163,7 +216,7 @@ const Home = (): JSX.Element => {
       if (addressType === 'url' && !/^https?:\/\//i.test(address)) {
         address = 'https://' + address;
       }
-      const resultRouteParams: NavigateOptions = { state: { address, addressType } };
+      const resultRouteParams: NavigateOptions = { state: { address, addressType, scenario} };
       navigate(`/check/${encodeURIComponent(address)}`, resultRouteParams);
     }
   };
@@ -182,15 +235,45 @@ const Home = (): JSX.Element => {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      submit();
+      // submit();
     }
   };
 
-  const formSubmitEvent = (event: FormEvent<HTMLFormElement>) => {
+  const formSubmitEvent = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    submit();
-  }
+  
+    if (!selectedFile) {
+      submit(false);
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('scenarioFile', selectedFile);
+  
+    try {
+      const response = await fetch('http://localhost:4000/api/upload-scenario-file', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error('File upload failed');
+      }
+  
+      const data = await response.json();
+      console.log('File upload response:', data);
+      setFileError(null);
 
+      // Add a delay before calling submit()
+      setTimeout(() => {
+        submit(true);
+      }, 2000); // Delay in milliseconds (e.g., 2000ms = 2 seconds)
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setFileError('Failed to upload file. Please try again.');
+    }
+  };
+  
 
   return (
     <HomeContainer>
@@ -216,7 +299,22 @@ const Home = (): JSX.Element => {
           handleKeyDown={handleKeyPress}
         />
         { errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
-        <Button type="submit" styles="width: calc(100% - 1rem);" size="large" onClick={submit}>Analyze!</Button>
+
+        <FileUploadWrapper>
+          <label htmlFor="file-upload">Upload a Scenario File (optional, must be .mjs)</label>
+          <input
+            id="file-upload"
+            type="file"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="upload-btn">
+            Choose File
+          </label>
+          {selectedFile && <p>Selected: {selectedFile.name}</p>}
+          {fileError && <ErrorMessage>{fileError}</ErrorMessage>}
+        </FileUploadWrapper>
+
+        <Button type="submit" styles="width: calc(100% - 1rem);" size="large">Analyze!</Button>
       </UserInputMain>
 
       <FixCard>

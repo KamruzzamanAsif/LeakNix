@@ -124,7 +124,11 @@ const FilterButtons = styled.div`
   }
 `;
 
-const Results = (props: { address?: string } ): JSX.Element => {
+const Results = (props: { address?: string} ): JSX.Element => {
+  const location = useLocation();
+  const {scenario } = location.state || {}; // Destructure state from location
+  console.log("custom scenario used?: ", scenario);
+
   const startTime = new Date().getTime();
 
   const address = props.address || useParams().urlToScan || '';
@@ -443,8 +447,8 @@ const Results = (props: { address?: string } ): JSX.Element => {
       
 
       // Output Console
-      <OutputConsole url={address} onJsonDataReceived={handleJsonDataReceived}/>
-
+      {scenario !== undefined && <OutputConsole url={address} scenario_used={scenario} onJsonDataReceived={handleJsonDataReceived}/>}
+      
       <ResultsContent>
         {jsonData && <OverviewCard title='Overview' data={jsonData} />}
       </ResultsContent>
