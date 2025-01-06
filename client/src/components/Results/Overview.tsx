@@ -25,7 +25,7 @@ const Overview = (jsonData: any) => {
     return (
         <section className="py-3">
             <div className="container px-4 mx-auto">
-                <div className="mb-6">
+                <div className="mb-0 mt-0">
                 <div className="flex flex-wrap items-center -mx-3 -mb-6">
                     <div className="w-full sm:w-1/2 xl:w-1/4 px-3 mb-6">
                         <div className="max-w-xs md:max-w-none mx-auto p-6 #242525 rounded-xl">
@@ -42,7 +42,7 @@ const Overview = (jsonData: any) => {
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalEventListeners}</span>
                                 </div>
                                 <div className="w-auto p-1">
-                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">30%</span>
+                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">EL</span>
                                 </div>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@ const Overview = (jsonData: any) => {
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalDomNodes}</span>
                                 </div>
                                 <div className="w-auto p-1">
-                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">30%</span>
+                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">DN</span>
                                 </div>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@ const Overview = (jsonData: any) => {
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalCollections}</span>
                                 </div>
                                 <div className="w-auto p-1">
-                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">30%</span>
+                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">C</span>
                                 </div>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@ const Overview = (jsonData: any) => {
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalObjects}</span>
                                 </div>
                                 <div className="w-auto p-1">
-                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">30%</span>
+                                    <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">O</span>
                                 </div>
                                 </div>
                             </div>

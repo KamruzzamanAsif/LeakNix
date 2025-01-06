@@ -34,161 +34,80 @@ ModuleRegistry.registerModules([
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// Custom Cell Renderer (Display logos based on cell value)
-const CompanyLogoRenderer = (params: CustomCellRendererProps) => (
-  <span
-    style={{
-      display: "flex",
-      height: "100%",
-      width: "100%",
-      alignItems: "center",
-    }}
-  >
-    {params.value && (
-      <img
-        alt={`${params.value} Flag`}
-        src={`https://www.ag-grid.com/example-assets/space-company-logos/${params.value.toLowerCase()}.png`}
-        style={{
-          display: "block",
-          width: "25px",
-          height: "auto",
-          maxHeight: "50%",
-          marginRight: "12px",
-          filter: "brightness(1.1)",
-        }}
-      />
-    )}
-    <p
-      style={{
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {params.value}
-    </p>
-  </span>
-);
-
 import './AGgrid.css';
 
-/* Custom Cell Renderer (Display tick / cross in 'Successful' column) */
-const MissionResultRenderer = (params: CustomCellRendererProps) => (
-  <span
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      height: "100%",
-      alignItems: "center",
-    }}
-  >
-    {
-      <img
-        alt={`${params.value}`}
-        src={`https://www.ag-grid.com/example-assets/icons/${params.value ? "tick-in-circle" : "cross-in-circle"}.png`}
-        style={{ width: "auto", height: "auto" }}
-      />
-    }
-  </span>
-);
+const AGgrid = ({
+  objectsData,
+  eventListenerData,
+  domNodesData,
+  collectionsData,
+}: {
+  objectsData: any[];
+  eventListenerData: any[];
+  domNodesData: any[];
+  collectionsData: any[];
+}) => {
+  // Combine data into a unified table format
+  const rowData = useMemo(() => {
+    const objects = objectsData.map((obj) => ({
+      test: obj.test,
+      category: "Objects",
+      type: obj.type,
+      addedCount: obj.addedCount,
+      retainedSize: obj.retainedSize,
+    }));
 
-/* Format Date Cells */
-const dateFormatter = (params: ValueFormatterParams): string => {
-  return new Date(params.value).toLocaleDateString("en-us", {
-    weekday: "long",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
+    const eventListeners = eventListenerData.map((listener) => ({
+      test: listener.test,
+      category: "Event Listeners",
+      type: listener.type,
+      addedCount: listener.addedCount,
+      retainedSize: 'N/A',
+      details: 'Leaking Nodes: ' + listener.nodes
+    }));
 
-// Row Data Interface
-interface IRow {
-  mission: string;
-  company: string;
-  location: string;
-  date: string;
-  time: string;
-  rocket: string;
-  price: number;
-  successful: boolean;
-}
+    const domNodes = domNodesData.map((node) => ({
+      test: node.test,
+      category: "DOM Nodes",
+      type: 'N/A',
+      addedCount: node.addedCount,
+      retainedSize: 'N/A',
+      details: node.type
+    }));
 
-const rowSelection: RowSelectionOptions = {
-  mode: "multiRow",
-  headerCheckbox: false,
-};
+    const collections = collectionsData.map((collection) => ({
+      test: collection.test,
+      category: "Collections",
+      type: collection.type,
+      addedCount: collection.addedCount,
+      retainedSize: 'N/A',
+      details: 'Preview: ' + collection.prview
+    }));
 
-// Create new GridExample component
-const AGgrid = () => {
-  // Row Data: The data to be displayed.
-  const [rowData, setRowData] = useState<IRow[]>([]);
+    return [...objects, ...eventListeners, ...domNodes, ...collections];
+  }, [objectsData, eventListenerData, domNodesData, collectionsData]);
 
-  // Column Definitions: Defines & controls grid columns.
-  const [colDefs] = useState<ColDef[]>([
-    {
-      field: "mission",
-      width: 150,
-    },
-    {
-      field: "company",
-      width: 130,
-      cellRenderer: CompanyLogoRenderer,
-    },
-    {
-      field: "location",
-      width: 225,
-    },
-    {
-      field: "date",
-      valueFormatter: dateFormatter,
-    },
-    {
-      field: "price",
-      width: 130,
-      valueFormatter: (params: ValueFormatterParams) => {
-        return "£" + params.value.toLocaleString();
-      },
-    },
-    {
-      field: "successful",
-      width: 120,
-      cellRenderer: MissionResultRenderer,
-    },
-    { field: "rocket" },
-  ]);
-
-  // Fetch data & update rowData state
-  useEffect(() => {
-    fetch("https://www.ag-grid.com/example-assets/space-mission-data.json")
-      .then((result) => result.json())
-      .then((rowData) => setRowData(rowData));
+  // Define columns
+  const colDefs: ColDef[] = useMemo(() => {
+    return [
+      { field: "test", headerName: "Test", width: 100 },
+      { field: "category", headerName: "Category", width: 150 },
+      { field: "type", headerName: "Type/Name", width: 250 },
+      { field: "addedCount", headerName: "Delta", width: 150 },
+      { field: "retainedSize", headerName: "Retained Size", width: 150 },
+      { field: "details", headerName: "Details", width: 200 },
+    ];
   }, []);
 
-  // Apply settings across all columns
+  // Default column definitions
   const defaultColDef = useMemo<ColDef>(() => {
     return {
       filter: true,
-      editable: true,
+      sortable: true,
+      resizable: true,
     };
   }, []);
 
-  
-  const autoGroupColumnDef = useMemo<ColDef>(() => {
-    return {
-      headerTooltip: "Group",
-      minWidth: 190,
-      tooltipValueGetter: (params) => {
-        const count = params.node && params.node.allChildrenCount;
-        if (count != null) {
-          return "Tooltip text - " + params.value + " (" + count + ")";
-        }
-        return params.value;
-      },
-    };
-  }, []);
-
-  // Container: Defines the grid's theme & dimensions.
   return (
     <div className="ag-theme-my-theme" style={{ width: "100%", height: "70vh" }}>
       <AgGridReact
@@ -196,13 +115,12 @@ const AGgrid = () => {
         columnDefs={colDefs}
         defaultColDef={defaultColDef}
         pagination={true}
-        rowSelection={rowSelection}
-        onSelectionChanged={(event) => console.log("Row Selected!")}
+        rowSelection="single"
+        onSelectionChanged={(event) => console.log("Row Selected:", event.api.getSelectedRows())}
         onCellValueChanged={(event) =>
           console.log(`New Cell Value: ${event.value}`)
         }
         sideBar={true}
-        autoGroupColumnDef={autoGroupColumnDef}
       />
     </div>
   );

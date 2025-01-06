@@ -448,11 +448,10 @@ const Results = (props: { address?: string } ): JSX.Element => {
       <ResultsContent>
         {jsonData && <OverviewCard title='Overview' data={jsonData} />}
       </ResultsContent>
-
+      
       
       <ResultsContent>
         {jsonData && <GridCard title='Result Table Summary' data={jsonData}/>}
-        {/* <GridCard title='Result Table Summary' data={jsonData}/> */}
       </ResultsContent>
       
       

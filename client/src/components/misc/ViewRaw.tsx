@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import colors from '../../styles/colors';
-import { Card } from '../Form/Card';
+import { Card } from '../Form/CardV2';
 import Button from '../Form/Button';
 import { useState } from 'react';
 
