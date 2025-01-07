@@ -64,6 +64,9 @@ wss.on('connection', (ws) => {
       // Start the child process using the constructed arguments array
       const childProcess = spawn('node', args);
 
+      // Calculate time
+      const startTime = Date.now(); // Start time
+
       // Notify the client that execution has started
       ws.send('Starting execution...');
 
@@ -83,8 +86,12 @@ wss.on('connection', (ws) => {
 
       // Notify the client when the process closes
       childProcess.on('close', (code) => {
+        const endTime = Date.now(); // End time
+        const elapsedTime = ((endTime - startTime) / 1000).toFixed(2); // Elapsed time in seconds
+
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(`Execution completed with code ${code}.`);
+          ws.send(`Total time elapsed: ${elapsedTime} seconds.`);
 
           // Read JSON file after process completes
           const jsonFilePath = path.resolve('fuite/output');
