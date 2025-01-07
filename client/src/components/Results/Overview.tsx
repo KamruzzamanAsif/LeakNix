@@ -36,7 +36,7 @@ const Overview = (jsonData: any) => {
                                 </div>
                             </div>
                             <div className="w-auto p-2">
-                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Leaking Event Listeners</h5>
+                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Listeners</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalEventListeners}</span>
@@ -59,7 +59,7 @@ const Overview = (jsonData: any) => {
                                 </div>
                             </div>
                             <div className="w-auto p-2">
-                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Leaking DOM Nodes</h5>
+                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking DOM Nodes</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalDomNodes}</span>
@@ -82,7 +82,7 @@ const Overview = (jsonData: any) => {
                                 </div>
                             </div>
                             <div className="w-auto p-2">
-                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Leaking Collections</h5>
+                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Collections</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalCollections}</span>
@@ -113,7 +113,7 @@ const Overview = (jsonData: any) => {
                                 </div>
                             </div>
                             <div className="w-auto p-2">
-                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Leaking Objects</h5>
+                                <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Objects</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
                                     <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalObjects}</span>

@@ -1,72 +1,76 @@
 // myScenario.mjs
-import { defaultWaitForPageIdle } from './puppeteerUtil.js'
+import { defaultWaitForPageIdle } from './puppeteerUtil.js';
 
 /**
  * OPTIONAL: Setup code to run before each test
  * @param { import("puppeteer").Page } page
-*/
-// export async function setup (page) {
-//   await page.waitForSelector('#userId');
-//   await page.type('#userId', 'riad.zakir@selise.ch');
-//   await page.waitForSelector('#password');
-//   await page.type('#password', '1qazZAQ!');
-//   await page.evaluate(() => { document.querySelector('[id=":r1:"]').click(); });
-// }
-
-/**
- * OPTIONAL: Code to run once on the page to determine which tests to run
- * @param { import("puppeteer").Page } page
  */
+
 export async function createTests(page) {
-    return [
-      {
-        data: {
-          href: "/page1",
-          fullHref: "http://localhost:3000/page1"
-        },
-        description: "Go to /page1 and back"
+  return [
+    {
+      data: {
+        selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[1]',
       },
-      // {
-      //   data: {
-      //     href: "/page2",
-      //     fullHref: "http://localhost:3000/page2"
-      //   },
-      //   description: "Go to /page2 and back"
-      // }
-    ];
+      description: "Navigate and click on Service and back"
+    },
+    {
+      data: {
+        selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[2]',
+      },
+      description: "Navigate and click on How we work and back"
+    },
+    // {
+    //   data: {
+    //     href: "/page2",
+    //     fullHref: "http://localhost:3000/page2"
+    //   },
+    //   description: "Go to /page2 and back"
+    // }
+  ];
 }
 
 
-async function clickFirstVisible (page, selector) {
-    const element = await page.evaluateHandle((selector) => {
-      return [...document.querySelectorAll(selector)].filter(el => {
-        // avoid links that open in a new tab
-        return el.target === '' &&
-          // quick and dirty visibility check
-          window.getComputedStyle(el).getPropertyValue('display') !== 'none' &&
-          window.getComputedStyle(el).getPropertyValue('visibility') !== 'hidden' &&
-          el.offsetHeight > 0 &&
-          el.offsetWidth > 0
-      })[0]
-    }, selector)
-    try {
-      try {
-        await element.click()
-      } catch (err) {
-        throw ono(err, `Element ${selector} is not clickable or is not an in-page SPA navigation`)
-      }
-    } finally {
-      await element.dispose()
+async function clickFirstVisible(page, xpath) {
+  const element = await page.evaluateHandle((xpath) => {
+    const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const element = result.singleNodeValue;
+
+    // Check if element is visible
+    if (element && 
+        window.getComputedStyle(element).getPropertyValue('display') !== 'none' && 
+        window.getComputedStyle(element).getPropertyValue('visibility') !== 'hidden' && 
+        element.offsetHeight > 0 && 
+        element.offsetWidth > 0) {
+      return element;
     }
+
+    return null; // No visible element found
+  }, xpath);
+
+  if (element) {
+    try {
+      await element.click();
+    } catch (err) {
+      throw new Error(`Element with XPath ${xpath} is not clickable or is not an in-page SPA navigation: ${err.message}`);
+    } finally {
+      await element.dispose();
+    }
+  } else {
+    console.log(`No visible element found for XPath: ${xpath}`);
+  }
 }
+
+
+
 
 /**
- * REQUIRED: Run a single iteration against a page – e.g., click a link and then go back
+ * REQUIRED: Run a single iteration against a page – e.g., execute colossal scenario and go back
  * @param { import("puppeteer").Page } page
  * @param { any } data
  */
 export async function iteration(page, data) {
-    await clickFirstVisible(page, `a[href=${JSON.stringify(data.href)}]`)
+    await clickFirstVisible(page, data.selector)
     await defaultWaitForPageIdle(page)
     await page.goBack()
     await defaultWaitForPageIdle(page)
@@ -76,12 +80,10 @@ export async function iteration(page, data) {
  * OPTIONAL: Teardown code to run after each test
  * @param { import("puppeteer").Page } page
  */
-export async function teardown(page) {
-}
+export async function teardown(page) {}
 
 /**
  * OPTIONAL: Code to wait asynchronously for the page to become idle
  * @param { import("puppeteer").Page } page
  */
-export async function waitForIdle(page) {
-}
+export async function waitForIdle(page) {}
