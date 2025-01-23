@@ -6,6 +6,7 @@ import About from '../src/views/About.tsx';
 import NotFound from '../src/views/NotFound.tsx';
 
 import FixHome from '../src/views/FixHome.tsx';
+import FixResults from '../src/views/FixResults.tsx';
 
 import ErrorBoundary from '../src/components/boundaries/PageError.tsx';
 import GlobalStyles from './styles/globals.tsx';
@@ -25,9 +26,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
+          <Route path="check" element={<Home />} />
           <Route path="/check/:urlToScan" element={<Results />} />
           <Route path="/fix" element={<FixHome />} />
+          <Route path="/fix/results" element={<FixResults />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path='/about' element={<About />} />

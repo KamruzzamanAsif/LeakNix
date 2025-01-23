@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Heading from '../components/Form/Heading';
 import Button from '../components/Form/Button';
@@ -131,6 +131,7 @@ const FixHome = (): JSX.Element => {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadCompleted, setUploadCompleted] = useState<boolean>(false);
   const [fileError, setFileError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -192,7 +193,9 @@ const FixHome = (): JSX.Element => {
     });
 };
 
-
+  const handleFixButtonClick = () => {
+    navigate(`/fix/results`);
+  }
 
   useEffect(() => {
     // Placeholder for potential redirection logic
@@ -252,6 +255,7 @@ const FixHome = (): JSX.Element => {
           size="large"
           styles="width: calc(100% - 1rem);"
           disabled={!uploadCompleted}
+          onClick={handleFixButtonClick}
         >
           Fix Leaks!
         </Button>
