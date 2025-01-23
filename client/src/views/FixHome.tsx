@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { type ChangeEvent, type FormEvent, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import Heading from '../components/Form/Heading';
@@ -109,24 +109,90 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
+const ProgressBar = styled.div`
+  width: 100%;
+  background-color: ${colors.backgroundDarker};
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 1rem;
+  .progress {
+    height: 8px;
+    background-color: ${colors.success};
+    width: ${(props: { progress: number }) => `${props.progress}%`};
+    transition: width 0.3s ease-in-out;
+  }
+`;
+
+
+
+
 const FixHome = (): JSX.Element => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadCompleted, setUploadCompleted] = useState<boolean>(false);
   const [fileError, setFileError] = useState<string | null>(null);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     if (file) {
-      const isMjsFile = file.name.endsWith('.zip');
-      if (!isMjsFile) {
+      const isValidZip = file.name.endsWith('.zip');
+      if (!isValidZip) {
         setFileError('Please select a valid .zip file.');
-        setSelectedFile(null); // Reset the file state if invalid
+        setSelectedFile(null);
+        setUploadProgress(0);
+        setUploadCompleted(false);
       } else {
-        setFileError(null); // Clear any previous error
+        setFileError(null);
         setSelectedFile(file);
-        console.log(`Selected file: ${file.name}`);
+        setUploadProgress(0);
+        setUploadCompleted(false);
+        startUpload(file); // Automatically upload the file
       }
     }
   };
+
+  const startUpload = (file: File) => {
+    const formData = new FormData();
+    formData.append('sourceCode', file);
+
+    // Phase 1: Start early progress simulation
+    let simulatedProgress = 0;
+    const progressInterval = setInterval(() => {
+      simulatedProgress += 5;
+      if (simulatedProgress >= 50) {
+        clearInterval(progressInterval); // Stop at 50%
+      }
+      setUploadProgress(simulatedProgress);
+    }, 100);
+
+    // Simulate a backend upload with fetch or axios
+    fetch('http://localhost:5000/api/upload-source-code', {
+      method: 'POST',
+      body: formData,
+    })
+    .then((response) => {
+      if (!response.ok) throw new Error('Upload failed');
+      return response.json();
+    })
+    .then(() => {
+      // Phase 2: Complete the progress after response
+      const remainingProgressInterval = setInterval(() => {
+        simulatedProgress += 10;
+        if (simulatedProgress >= 100) {
+          clearInterval(remainingProgressInterval);
+          setUploadCompleted(true);
+        }
+        setUploadProgress(simulatedProgress);
+      }, 100);
+    })
+    .catch(() => {
+      setFileError('Failed to upload file.');
+      setUploadProgress(0);
+      setUploadCompleted(false);
+    });
+};
+
+
 
   useEffect(() => {
     // Placeholder for potential redirection logic
@@ -149,28 +215,44 @@ const FixHome = (): JSX.Element => {
         </Heading>
         
         <FileUploadWrapper>
-          <label htmlFor="dropzone-file" className="upload-btn" style={{ borderWidth: '1.5px', padding: '20px', minWidth: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+          <label
+            htmlFor="file-upload"
+            className="upload-btn"
+            style={{
+              marginTop: '40px',
+              padding: '20px',
+              minWidth: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-              </svg>
-              <span style={{ display: 'block', fontSize: 'large', font: 'bold', marginBottom: '20px', textAlign: 'center' }}>
-                  Click to upload or drag and drop
-              </span>
-              <span style={{ display: 'block', fontSize: 'smaller', textAlign: 'center' }}>
-                  Only .zip file is supported
-              </span>
+            </svg>
+            <span>Click to upload or drag and drop</span>
+            <span style={{ fontSize: 'smaller' }}>Only .zip file is supported</span>
           </label>
-
           <input
-            id="dropzone-file"
+            id="file-upload"
             type="file"
             onChange={handleFileChange}
           />
           {fileError && <p style={{ color: 'red' }}>{fileError}</p>}
           {selectedFile && <p style={{ color: 'yellow' }}>Selected: {selectedFile.name}</p>}
+          {uploadProgress > 0 && (
+            <ProgressBar progress={uploadProgress}>
+              <div className="progress"></div>
+            </ProgressBar>
+          )}
         </FileUploadWrapper>
 
-        <Button type="submit" styles="width: calc(100% - 1rem);" size="large">
+        <Button
+          type="button"
+          size="large"
+          styles="width: calc(100% - 1rem);"
+          disabled={!uploadCompleted}
+        >
           Fix Leaks!
         </Button>
       </UserInputMain>

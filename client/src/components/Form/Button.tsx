@@ -17,6 +17,7 @@ interface ButtonProps {
   title?: string,
   type?: 'button' | 'submit' | 'reset' | undefined,
   loadState?: LoadState,
+  disabled?: boolean,
 };
 
 const StyledButton = styled.button<ButtonProps>`
@@ -44,6 +45,10 @@ const StyledButton = styled.button<ButtonProps>`
     `color: ${props.fgColor};` : `color: ${colors.background};`
   }
   ${props => props.styles}
+  ${(props) => props.disabled && `
+    background-color: #cccccc;
+    cursor: not-allowed;
+  `}
 `;
 
 
@@ -68,7 +73,7 @@ const Loader = (props: { loadState: LoadState }) => {
 };
 
 const Button = (props: ButtonProps): JSX.Element => {
-  const { children, size, bgColor, fgColor, onClick, styles, title, loadState, type } = props;
+  const { children, size, bgColor, fgColor, onClick, styles, title, loadState, type, disabled } = props;
   return (
     <StyledButton
       onClick={onClick || (() => null) }
@@ -78,6 +83,7 @@ const Button = (props: ButtonProps): JSX.Element => {
       styles={styles}
       title={title?.toString()}
       type={type || 'button'}
+      disabled={disabled}
       >
       { loadState && <Loader loadState={loadState} /> }
       {children}
