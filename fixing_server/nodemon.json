@@ -1,5 +1,0 @@
-{
-    "watch": ["server/**/*.js"],
-    "ignore": ["codes/**/*", "node_modules"]
-}
-  
