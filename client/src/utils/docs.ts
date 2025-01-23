@@ -9,31 +9,31 @@ export interface Doc {
 
 
 const docs: Doc[] = [
-  {
-    id: "get-ip",
-    title: "IP Info",
-    description:
-      "An IP address (Internet Protocol address) is a numerical label assigned to each device connected to a network / the internet. The IP associated with a given domain can be found by querying the Domain Name System (DNS) for the domain's A (address) record.",
-    use: "Finding the IP of a given server is the first step to conducting further investigations, as it allows us to probe the server for additional info. Including creating a detailed map of a target's network infrastructure, pinpointing the physical location of a server, identifying the hosting service, and even discovering other domains that are hosted on the same IP address.",
-    resources: [
-      { title: 'Understanding IP Addresses', link: 'https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking'},
-      { title: 'IP Addresses - Wiki', link: 'https://en.wikipedia.org/wiki/IP_address'},
-      { title: 'RFC-791 Internet Protocol', link: 'https://tools.ietf.org/html/rfc791'},
-      { title: 'whatismyipaddress.com', link: 'https://whatismyipaddress.com/'},
-    ],
-  },
-  {
-    id: "location",
-    title: "Server Location",
-    description:
-      "The Server Location task determines the physical location of the server hosting a given website based on its IP address. This is done by looking up the IP in a location database, which maps the IP to a lat + long of known data centers and ISPs. From the latitude and longitude, it's then possible to show additional contextual info, like a pin on the map, along with address, flag, time zone, currency, etc.",
-    use: "Knowing the server location is a good first step in better understanding a website. For site owners this aids in optimizing content delivery, ensuring compliance with data residency requirements, and identifying potential latency issues that may impact user experience in specific geographical regions. And for security researcher, assess the risk posed by specific regions or jurisdictions regarding cyber threats and regulations.",
-    resources: [
-      { title: 'IP Locator', link: 'https://geobytes.com/iplocator/' },
-      { title: 'Internet Geolocation - Wiki', link: 'https://en.wikipedia.org/wiki/Internet_geolocation' },
-    ],
-    screenshot: 'https://i.ibb.co/cXH2hfR/wc-location.png',
-  },
+  // {
+  //   id: "get-ip",
+  //   title: "IP Info",
+  //   description:
+  //     "An IP address (Internet Protocol address) is a numerical label assigned to each device connected to a network / the internet. The IP associated with a given domain can be found by querying the Domain Name System (DNS) for the domain's A (address) record.",
+  //   use: "Finding the IP of a given server is the first step to conducting further investigations, as it allows us to probe the server for additional info. Including creating a detailed map of a target's network infrastructure, pinpointing the physical location of a server, identifying the hosting service, and even discovering other domains that are hosted on the same IP address.",
+  //   resources: [
+  //     { title: 'Understanding IP Addresses', link: 'https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking'},
+  //     { title: 'IP Addresses - Wiki', link: 'https://en.wikipedia.org/wiki/IP_address'},
+  //     { title: 'RFC-791 Internet Protocol', link: 'https://tools.ietf.org/html/rfc791'},
+  //     { title: 'whatismyipaddress.com', link: 'https://whatismyipaddress.com/'},
+  //   ],
+  // },
+  // {
+  //   id: "location",
+  //   title: "Server Location",
+  //   description:
+  //     "The Server Location task determines the physical location of the server hosting a given website based on its IP address. This is done by looking up the IP in a location database, which maps the IP to a lat + long of known data centers and ISPs. From the latitude and longitude, it's then possible to show additional contextual info, like a pin on the map, along with address, flag, time zone, currency, etc.",
+  //   use: "Knowing the server location is a good first step in better understanding a website. For site owners this aids in optimizing content delivery, ensuring compliance with data residency requirements, and identifying potential latency issues that may impact user experience in specific geographical regions. And for security researcher, assess the risk posed by specific regions or jurisdictions regarding cyber threats and regulations.",
+  //   resources: [
+  //     { title: 'IP Locator', link: 'https://geobytes.com/iplocator/' },
+  //     { title: 'Internet Geolocation - Wiki', link: 'https://en.wikipedia.org/wiki/Internet_geolocation' },
+  //   ],
+  //   screenshot: 'https://i.ibb.co/cXH2hfR/wc-location.png',
+  // },
   {
     id: "event-listener-leak",
     title: "Event Listener Leak Detection",
@@ -131,17 +131,6 @@ const docs: Doc[] = [
     resources: [
       { title: 'Heap Snapshot Analysis', link: 'https://developers.google.com/web/tools/chrome-devtools/memory-problems' },
       { title: 'Profiling JavaScript Memory', link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management' }
-    ]
-  },
-  {
-    id: "third-party-leak",
-    title: "Third-Party Library Leak Detection",
-    description:
-      "Identifies memory leaks caused by third-party libraries and frameworks that are integrated into your web application.",
-    use: "Allows developers to pinpoint memory leaks from external sources, helping ensure that third-party code does not introduce performance issues.",
-    resources: [
-      { title: 'Managing Third-Party Dependencies', link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management' },
-      { title: 'Profiling Third-Party Code', link: 'https://developers.google.com/web/tools/chrome-devtools/memory-problems' }
     ]
   },
   {

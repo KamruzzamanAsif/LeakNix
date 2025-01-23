@@ -43,19 +43,19 @@ const FixCard = styled.div`
   background: ${colors.backgroundLighter};
   box-shadow: 4px 4px 0px ${colors.bgShadowColor};
   border-radius: 8px;
-  padding: 1rem;
+  padding: 0.75rem; /* Reduced padding */
   z-index: 5;
-  margin: 1rem;
-  width: calc(100% - 2rem);
+  margin: 0.5rem; /* Reduced margin */
+  width: calc(100% - 1rem); /* Adjusted width to match margin */
   max-width: 60rem;
   z-index: 2;
   .inner {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem; /* Adjusted gap for less spacing */
     p {
-      margin: 0.25rem 0;
+      margin: 0.2rem 0; /* Reduced margin for paragraphs */
     }
   }
   a {
@@ -67,7 +67,7 @@ const FixCard = styled.div`
     transition: box-shadow 0.2s;
     margin: 0 auto;
     display: block;
-    width: 200px;
+    width: 180px; /* Slightly smaller image */
     &:hover {
       box-shadow: 4px 4px 0px ${colors.fgShadowColor};
     }
@@ -76,10 +76,11 @@ const FixCard = styled.div`
     }
   }
   .cta {
-    font-size: 0.78rem;
+    font-size: 0.75rem; /* Slightly smaller font size */
     a { color: ${colors.primary}; }
   }
 `;
+
 
 
 const ErrorMessage = styled.p`
@@ -321,14 +322,9 @@ const Home = (): JSX.Element => {
         <Heading as="h2" size="small" color={colors.primary}>Already Leaks?</Heading>
         <div className="inner">
           <p>
-            LeakNix - Automatically finds and fixes potential leaks from source code.
-            <br />
-            <span className="cta">
-              Save your time if you know it already leaks. Because LeakNix doesn't require to check first.
-            </span>
+            No need to Detect. LeakNix - Automatically finds and fixes potential leaks from source code.
           </p>
           <a
-            target="_blank"
             rel="noreferrer"
             href="">
             <Button type="submit" styles="width: calc(100% - 1rem);" size="medium" onClick={clickFixNow}>Fix Now!</Button>
