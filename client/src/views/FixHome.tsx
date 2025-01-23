@@ -149,14 +149,17 @@ const FixHome = (): JSX.Element => {
         </Heading>
         
         <FileUploadWrapper>
-            <label htmlFor="dropzone-file" className="upload-btn" style={{ borderWidth: '1.5px', padding: '20px', minWidth: '40%'}}>
-                <span style={{ display: 'block', fontSize: 'large', font: 'bold', marginBottom: '20px' }}>
-                    Click to upload or drag and drop
-                </span>
-                <span style={{ display: 'block', fontSize: 'smaller' }}>
-                    Only .zip file is supported
-                </span>
-            </label>
+          <label htmlFor="dropzone-file" className="upload-btn" style={{ borderWidth: '1.5px', padding: '20px', minWidth: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+              </svg>
+              <span style={{ display: 'block', fontSize: 'large', font: 'bold', marginBottom: '20px', textAlign: 'center' }}>
+                  Click to upload or drag and drop
+              </span>
+              <span style={{ display: 'block', fontSize: 'smaller', textAlign: 'center' }}>
+                  Only .zip file is supported
+              </span>
+          </label>
 
           <input
             id="dropzone-file"
