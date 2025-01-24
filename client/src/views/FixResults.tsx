@@ -10,6 +10,8 @@ import Nav from '../components/Form/Nav';
 import Loader from '../components/misc/Loader';
 import ViewRaw from '../components/misc/ViewRaw';
 
+import DiffViewer from '../components/FixResults/DiffViewer';
+
 
 
 const ResultsOuter = styled.div`
@@ -29,15 +31,23 @@ const ResultsOuter = styled.div`
 const FixResults = (): JSX.Element => {
   // const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const address = 'https://galaxy.ai/ai-code-fixer';
+  const [diffJsonData, setDiffJsonData] = useState<any>(null); // State to store JSON data
 
   useEffect(() => {
-    // eikhane fix api call dibo
+    // Fetch JSON data (your API endpoint here)
+    fetch('http://localhost:5000/api/get-diffs') // Replace with your actual API endpoint
+      .then((response) => response.json())
+      .then((data) => {
+        setDiffJsonData(data.diffs);  // Set the fetched data
+        setLoading(false);  // Set loading to false after data is fetched
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);  // Set loading to false even in case of error
+      });
   }, []);
   
  
-  // Get the output json data from the server
-  const [jsonData, setJsonData] = useState<any>(null); // State to store JSON data
 
 
 //************************** End -> <Section: WebSite information Fetching> ***************************// 
@@ -53,12 +63,12 @@ const FixResults = (): JSX.Element => {
       </Nav>
 
 
-      {/* <Loader show={loadingJobs.filter((job: LoadingJob) => job.state !== 'loading').length < 10} /> */}
+      
       {loading && <Loader show={true}/>} {/* Show loader until isOverviewRendered is true */}
 
+      {diffJsonData && <DiffViewer diffs={diffJsonData} />}
       
-      
-      <ViewRaw jsonData={jsonData} />
+      <ViewRaw jsonData={diffJsonData} />
       <Footer />
       <ToastContainer limit={3} draggablePercent={60} autoClose={2500} theme="dark" position="bottom-right" />
     </ResultsOuter>

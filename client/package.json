@@ -23,6 +23,8 @@
     "axios": "^1.7.7",
     "babel-plugin-styled-components": "^2.1.4",
     "cheerio": "^1.0.0",
+    "diff2html": "^3.4.51",
+    "highlight.js": "^11.11.1",
     "lucide-react": "^0.473.0",
     "pretty-bytes": "^6.1.1",
     "primereact": "^10.9.1",

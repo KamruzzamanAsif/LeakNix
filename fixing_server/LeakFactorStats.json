@@ -1,0 +1,20 @@
+{
+    "memoryLeakFixResults": {
+        "countOfleaks": {
+            "countOfTimingEventLeaks": 3,
+            "countOfEventListenerLeaks": 1,
+            "totalCountOfPotentialLeaks": 4
+        },
+        "refactoring": {
+            "filesRefactoredForTimingEventLeak": [
+                "fixed_code\\react-event-listeners\\src\\Page2.js",
+                "fixed_code\\react-event-listeners\\src\\Page3.js",
+                "fixed_code\\react-event-listeners\\src\\Page1.js"
+            ],
+            "filesRefactoredForEventListenerLeak": [
+                "fixed_code\\react-event-listeners\\src\\Page1.js"
+            ],
+            "totalFilesRefactored": 3
+        }
+    }
+}

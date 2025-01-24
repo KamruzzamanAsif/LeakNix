@@ -1,5 +1,5 @@
 {
-    "watch": ["server/**/*.js"],
+    "watch": ["fixing_server/**/*.js"],
     "ignore": ["codes/**/*", "node_modules"]
 }
   
