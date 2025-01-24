@@ -51,8 +51,16 @@ const FixResults = (): JSX.Element => {
 
 
 //************************** End -> <Section: WebSite information Fetching> ***************************// 
-
-  
+  const diffString = `
+  diff --git a/sample.js b/sample.js
+  index 0000001..0ddf2ba
+  --- a/sample.js
+  +++ b/sample.js
+  @@ -1 +1 @@
+  -console.log("Hello World!")
+  +console.log("Hello from Diff2Html!")
+  `;
+    
   return (
     <ResultsOuter>
 

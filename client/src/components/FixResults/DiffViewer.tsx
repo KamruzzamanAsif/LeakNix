@@ -1,51 +1,98 @@
 import React, { useEffect } from 'react';
-import { html } from 'diff2html'; // Import `html` to convert diffJson to HTML
-import 'diff2html/bundles/css/diff2html.min.css'; // Ensure CSS is imported for diff2html styling
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css'; // Import a highlight.js theme
-import 'diff2html/bundles/css/diff2html.min.css';
+import { html } from 'diff2html'; // Convert diffJson to HTML
+import 'diff2html/bundles/css/diff2html.min.css'; // Import Diff2Html CSS
+import hljs from 'highlight.js'; // Import Highlight.js
+import 'highlight.js/styles/github.css'; // Highlight.js theme
 
 interface DiffViewerProps {
   diffs: Array<{
-    filename: string;  // File name
-    fullCode: string;  // Full code of the file
+    filename: string; // File name
+    fullCode: string; // Full code of the file
     diffJson: Array<{
-      blocks: any[];  // Diff blocks
+      blocks: any[]; // Diff blocks
       deletedLines: number;
       addedLines: number;
       oldName: string;
       language: string;
       newName: string;
     }>;
+    rawDiff: string; // Raw diff string
   }>;
 }
 
 const DiffViewer: React.FC<DiffViewerProps> = ({ diffs }) => {
   useEffect(() => {
-    // Apply syntax highlighting after the component mounts
-    hljs.highlightAll();
+    // Find all code blocks in the rendered diff and apply Highlight.js
+    document.querySelectorAll('.d2h-code-line-ctn').forEach((el) => {
+      const codeElement = document.createElement('code');
+      codeElement.className = 'language-js'; // Add syntax highlighting class
+      codeElement.innerHTML = el.innerHTML; // Preserve content
+      el.innerHTML = ''; // Clear existing content
+      el.appendChild(codeElement); // Insert new code element
+    });
+    document.querySelectorAll('code.language-js').forEach((el) => {
+      hljs.highlightElement(el);
+    });
   }, [diffs]);
 
   if (!diffs || diffs.length === 0) {
-    return <p>No diffs available to display.</p>; // If diffs is empty or undefined
+    return <p>No diffs available to display.</p>;
   }
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <style>
+        {`
+          .d2h-code-line-ctn {
+            background-color: transparent !important; /* Remove white background */
+            color: white !important; /* Set default text color to white */
+          }
+          .hljs {
+            background: transparent !important; /* Preserve background transparency */
+            color: white !important; /* Set default text color to white */
+          }
+          .hljs-string {
+            color: green !important; /* Set string color to dark blue */
+          }
+          .hljs-subst {
+            color: white !important; /* Ensure template literals are white */
+          }
+        `}
+      </style>
       <h1 style={{ textAlign: 'center', color: '#333' }}>Code Diffs</h1>
+      
       {diffs.map((diff, index) => (
-        <div key={index} style={{ marginBottom: '40px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f9f9f9' }}>
-          {/* Display Diffs and Highlight Changes */}
-          {diff.diffJson && diff.diffJson.length > 0 ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: html(diff.diffJson, { outputFormat: 'side-by-side', drawFileList: true, matching: 'lines', highlight: true, highlightLanguages: true, colorScheme: 'dark' }), // Convert the diffJson to HTML and highlight changes
-              }}
-              style={{ border: '1px solid #ddd', borderRadius: '8px', marginTop: '20px' }}
-            />
-          ) : (
-            <p>No diff available for this file.</p> // Fallback if diffJson is empty
-          )}
+        <div
+          key={index}
+          style={{
+            marginBottom: '40px',
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            padding: '20px',
+            backgroundColor: '#f9f9f9',
+          }}
+        >
+          <h2 style={{ marginBottom: '10px', color: '#555' }}>{diff.filename}</h2>
+          {/* Render diff using Diff2Html */}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: html(diff.rawDiff, {
+                outputFormat: 'side-by-side', // Side-by-side diff view
+                drawFileList: false, // Disable file list
+                matching: 'lines', // Match lines for better alignment
+                highlight: true,
+                colorScheme: 'dark',
+                // highlightLanguages: 'language-js',
+              }),
+            }}
+            style={{
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+              overflowX: 'auto',
+              marginTop: '20px',
+            }}
+            className="diff-container"
+          />
         </div>
       ))}
     </div>

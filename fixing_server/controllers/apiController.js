@@ -254,7 +254,7 @@ exports.getDiffs = async (req, res) => {
 
           // Generate unified diff
           const fileDiff = diff.createPatch(relativePath, sourceContent, fixedContent);
-
+          
           // Parse the diff into a format diff2html understands
           const diffJson = parse(fileDiff);
 
@@ -269,7 +269,8 @@ exports.getDiffs = async (req, res) => {
             diffs.push({
               filename: relativePath,
               fullCode: sourceContent, // Add full code content from the source file
-              diffJson: diffJson
+              diffJson: diffJson,
+              rawDiff: fileDiff,
             });
           } 
         }
