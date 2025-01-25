@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart';
 
 interface PieChartProps {
   data: Array<{ id: number; value: number; label: string }>;
@@ -49,9 +49,23 @@ const CustomPieChart: React.FC<PieChartProps> = ({
             endAngle: endAngle,
             cx: cx,
             cy: cy,
+            highlightScope: { fade: 'global', highlight: 'item' },
+            faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
           },
         ]}
-        width={380}
+        sx={{
+          // Style for arc labels
+          [`& .${pieArcLabelClasses.root}`]: {
+            fontWeight: 'bold',
+            fill: 'green', // Change arc label color to green
+            fontSize: '14px',
+          },
+          '& .MuiChartsLegend-series text': {
+            fontSize: "1em !important",
+            fill: "white !important",
+          },
+        }}
+        width={520}
         height={300}
       />
     </div>

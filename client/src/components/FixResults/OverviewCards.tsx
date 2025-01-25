@@ -1,7 +1,6 @@
-import { Card } from '../../components/Form/Card';
+import { Card } from '../Form/CardV3';
 import colors from '../../styles/colors';
-import CustomPieChart from './CustomPieChart';
-import { useEffect } from 'react';
+import styled from '@emotion/styled';
 
 const cardStyles = `
   small { 
@@ -45,14 +44,25 @@ const cardStyles = `
   }
 `;
 
+const StyledTotalFiles = styled.div`
+  color: ${colors.primary};
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-top: 1rem;
+  box-shadow: 2px 2px 4px ${colors.bgShadowColor};
+`;
 
-const PieChartCard = (props: { title: string, data: any}): JSX.Element => {
-  
+ const OverviewCard = (props: { title: string, data: any}): JSX.Element => {
   return (
-    <Card heading={props.title} styles={cardStyles}>        
-      <CustomPieChart data={props.data} />
+    <Card heading={props.title} styles={cardStyles}>
+      <StyledTotalFiles>
+        {props.data}
+      </StyledTotalFiles>
     </Card>
   );
 }
 
-export default PieChartCard;
+export default OverviewCard;

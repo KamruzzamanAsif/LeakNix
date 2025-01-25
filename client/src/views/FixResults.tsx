@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import Masonry from 'react-masonry-css'
 
 
@@ -15,6 +15,12 @@ import ViewRaw from '../components/misc/ViewRaw';
 import DiffViewer from '../components/FixResults/DiffViewer';
 import CustomPieChart from '../components/FixResults/CustomPieChart';
 import PieChartCard from '../components/FixResults/PieChartCard';
+import OverviewCard from '../components/Results/OverviewCard';
+
+import { Card } from '../components/Form/Card';
+import TotalFilesRefactored from '../components/FixResults/TotalFilesRefactored';
+import MyCard from '../components/FixResults/OverviewCards';
+import FixOverview from '../components/FixResults/FixOverview';
 
 const ResultsOuter = styled.div`
   display: flex;
@@ -40,64 +46,74 @@ const ResultsContent = styled.section`
 
 
 const FixResults = (): JSX.Element => {
-  // const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [diffJsonData, setDiffJsonData] = useState<any>(null); // State to store JSON data
+  const [fixResult, setFixResult] = useState<any>(null);
+  const [diffData, setDiffData] = useState<any>(null); // Store diffs data
 
-  // useEffect(() => {
-  //   // Fetch JSON data (your API endpoint here)
-  //   fetch('http://localhost:5000/api/get-diffs') // Replace with your actual API endpoint
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setDiffJsonData(data.diffs);  // Set the fetched data
-  //       setLoading(false);  // Set loading to false after data is fetched
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching data:', error);
-  //       setLoading(false);  // Set loading to false even in case of error
-  //     });
-  // }, []);
-  
- 
+  useEffect(() => {
+    const runFixProcess = async () => {
+      try {
+        setLoading(true);
+        toast.info('Starting the leak-fixing process...', { autoClose: 2000 });
 
+        // Step 1: Call fix-leak
+        // const fixLeakResponse = await fetch('http://localhost:5000/api/fix-leak', {
+        //   method: 'POST',
+        // });
+        // if (!fixLeakResponse.ok) throw new Error('Failed to fix leaks');
+        // const fixLeakResult = await fixLeakResponse.json();
+        // toast.success('Leak-fixing completed successfully!', { autoClose: 2000 });
 
-//************************** End -> <Section: WebSite information Fetching> ***************************// 
- 
-    
+        // Step 2: Call get-results
+        const resultsResponse = await fetch('http://localhost:5000/api/get-results');
+        if (!resultsResponse.ok) throw new Error('Failed to fetch results');
+        const resultsData = await resultsResponse.json();
+        setFixResult(resultsData);
+        console.log(fixResult);
+        toast.success('Fetched results successfully!', { autoClose: 2000 });
+
+        // Step 3: Call get-diffs
+        const diffsResponse = await fetch('http://localhost:5000/api/get-diffs');
+        if (!diffsResponse.ok) throw new Error('Failed to fetch diffs');
+        const diffsData = await diffsResponse.json();
+        setDiffData(diffsData);
+        toast.success('Fetched diffs successfully!', { autoClose: 2000 });
+      } catch (error) {
+        console.error('Error in leak-fixing process:', error);
+        toast.error(`Error: ${error.message}`, { autoClose: 3000 });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    runFixProcess();
+  }, []);
+
   return (
     <ResultsOuter>
-
       <Nav>
         <Heading color={colors.textColor} size="medium">
           {'Leak Fixing'}
         </Heading>
       </Nav>
 
+      {loading && <Loader show={true} />} {/* Show loader while the process is ongoing */}
 
-      
-      {/* {loading && <Loader show={true}/>} Show loader until isOverviewRendered is true */}
+      {!loading && fixResult && (
+        <>
+          {fixResult && <FixOverview data={fixResult} />}
 
-      {/* {diffJsonData && <DiffViewer diffs={diffJsonData} />} */}
+          
+        </>
+      )}
 
-      
-
-      <ResultsContent>
-        <Masonry
-          breakpointCols={{ 10000: 12, 4000: 9, 3600: 8, 3200: 7, 2800: 6, 2400: 5, 2000: 4, 1600: 3, 1200: 2, 800: 1 }}
-          className="masonry-grid"
-          columnClassName="masonry-grid-col">
-          {
-            <PieChartCard title='Pie Chart' data={"xy"}/>
-          }
-          </Masonry>
-      </ResultsContent>
-      
-
-      <ViewRaw jsonData={diffJsonData} />
+      {fixResult && <ViewRaw jsonData={fixResult} />}
       <Footer />
       <ToastContainer limit={3} draggablePercent={60} autoClose={2500} theme="dark" position="bottom-right" />
     </ResultsOuter>
   );
-}
+};
 
 export default FixResults;
+
+

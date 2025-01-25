@@ -161,14 +161,24 @@ exports.fixLeak = async (req, res) => {
         });
 
         // Handle process close
+        // Handle process close
         child.on('close', (code) => {
-            console.log(`child process exited with code ${code}`);
-            res.status(200).send(`Process completed with code ${code}`);
+          console.log(`Child process exited with code ${code}`);
+          // Send JSON response instead of plain text
+          res.status(200).json({
+              status: 'success',
+              message: 'Process completed',
+              exitCode: code
+          });
         });
     } catch (err) {
-        console.error('Error:', err);
-        res.status(500).send('An error occurred wile fixing.');
-    }
+      console.error('Error:', err);
+      res.status(500).json({
+          status: 'error',
+          message: 'An error occurred while fixing.',
+          error: err.message
+      });
+  }
 };
 
 
