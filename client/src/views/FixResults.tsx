@@ -13,14 +13,11 @@ import Loader from '../components/misc/Loader';
 import ViewRaw from '../components/misc/ViewRaw';
 
 import DiffViewer from '../components/FixResults/DiffViewer';
-import CustomPieChart from '../components/FixResults/CustomPieChart';
-import PieChartCard from '../components/FixResults/PieChartCard';
 import OverviewCard from '../components/Results/OverviewCard';
 
-import { Card } from '../components/Form/Card';
-import TotalFilesRefactored from '../components/FixResults/TotalFilesRefactored';
-import MyCard from '../components/FixResults/OverviewCards';
 import FixOverview from '../components/FixResults/FixOverview';
+import PatchTable from '../components/FixResults/PatchTable';
+import PatchTableCard from '../components/FixResults/PatchTaleCard';
 
 const ResultsOuter = styled.div`
   display: flex;
@@ -76,7 +73,7 @@ const FixResults = (): JSX.Element => {
         const diffsResponse = await fetch('http://localhost:5000/api/get-diffs');
         if (!diffsResponse.ok) throw new Error('Failed to fetch diffs');
         const diffsData = await diffsResponse.json();
-        setDiffData(diffsData);
+        setDiffData(diffsData.diffs);
         toast.success('Fetched diffs successfully!', { autoClose: 2000 });
       } catch (error) {
         console.error('Error in leak-fixing process:', error);
@@ -103,7 +100,9 @@ const FixResults = (): JSX.Element => {
         <>
           {fixResult && <FixOverview data={fixResult} />}
 
-          
+          {/* {diffData && <DiffViewer diffs={diffData} />} */}
+
+          <PatchTableCard title={'Detailed Patch Breakdown'} data={undefined}/>
         </>
       )}
 

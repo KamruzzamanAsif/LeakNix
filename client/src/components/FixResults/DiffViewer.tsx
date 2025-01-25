@@ -20,7 +20,7 @@ interface DiffViewerProps {
   }>;
 }
 
-const DiffViewer: React.FC<DiffViewerProps> = ({ diffs }) => {
+const DiffViewer: React.FC<DiffViewerProps> = ({ diffs}) => {
   useEffect(() => {
     // Find all code blocks in the rendered diff and apply Highlight.js
     document.querySelectorAll('.d2h-code-line-ctn').forEach((el) => {

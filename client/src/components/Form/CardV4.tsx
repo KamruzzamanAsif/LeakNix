@@ -35,7 +35,7 @@ export const Card = (props: CardProps): JSX.Element => {
   return (
     <ErrorBoundary title={heading}>
       <StyledCard styles={styles}>
-        { heading && <Heading className="inner-heading" as="h3" align="left" color={colors.primary}>{heading}</Heading> }
+        { heading && <Heading className="inner-heading" as="h2" align="center" font-size='large' color={colors.primary}>{heading}</Heading> }
         {children}
       </StyledCard>
     </ErrorBoundary>
