@@ -20,7 +20,7 @@ interface DiffViewerProps {
   }>;
 }
 
-const DiffViewer: React.FC<DiffViewerProps> = ({ diffs}) => {
+const DiffViewer: React.FC<DiffViewerProps> = ({ diffs }) => {
   useEffect(() => {
     // Find all code blocks in the rendered diff and apply Highlight.js
     document.querySelectorAll('.d2h-code-line-ctn').forEach((el) => {
@@ -40,7 +40,7 @@ const DiffViewer: React.FC<DiffViewerProps> = ({ diffs}) => {
   }
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ padding: '1px', fontFamily: 'Arial, sans-serif' }}>
       <style>
         {`
           .d2h-code-line-ctn {
@@ -59,20 +59,16 @@ const DiffViewer: React.FC<DiffViewerProps> = ({ diffs}) => {
           }
         `}
       </style>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>Code Diffs</h1>
-      
       {diffs.map((diff, index) => (
         <div
           key={index}
           style={{
-            marginBottom: '40px',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            padding: '20px',
-            backgroundColor: '#f9f9f9',
+            marginBottom: '0px',
+            borderRadius: '5px',
+            padding: '2px',
+            backgroundColor: 'background.paper',
           }}
         >
-          <h2 style={{ marginBottom: '10px', color: '#555' }}>{diff.filename}</h2>
           {/* Render diff using Diff2Html */}
           <div
             dangerouslySetInnerHTML={{
@@ -82,7 +78,6 @@ const DiffViewer: React.FC<DiffViewerProps> = ({ diffs}) => {
                 matching: 'lines', // Match lines for better alignment
                 highlight: true,
                 colorScheme: 'dark',
-                // highlightLanguages: 'language-js',
               }),
             }}
             style={{

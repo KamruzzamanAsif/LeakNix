@@ -102,7 +102,7 @@ const FixResults = (): JSX.Element => {
 
           {/* {diffData && <DiffViewer diffs={diffData} />} */}
 
-          <PatchTableCard title={'Detailed Patch Breakdown'} data={undefined}/>
+          <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/>
         </>
       )}
 
