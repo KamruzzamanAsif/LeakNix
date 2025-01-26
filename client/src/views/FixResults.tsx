@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { ToastContainer, toast } from 'react-toastify';
-import Masonry from 'react-masonry-css'
 
 
 import colors from '../styles/colors';
@@ -12,11 +11,8 @@ import Nav from '../components/Form/Nav';
 import Loader from '../components/misc/Loader';
 import ViewRaw from '../components/misc/ViewRaw';
 
-import DiffViewer from '../components/FixResults/DiffViewer';
-import OverviewCard from '../components/Results/OverviewCard';
 
 import FixOverview from '../components/FixResults/FixOverview';
-import PatchTable from '../components/FixResults/PatchTable';
 import PatchTableCard from '../components/FixResults/PatchTaleCard';
 
 const ResultsOuter = styled.div`
@@ -54,12 +50,12 @@ const FixResults = (): JSX.Element => {
         toast.info('Starting the leak-fixing process...', { autoClose: 2000 });
 
         // Step 1: Call fix-leak
-        // const fixLeakResponse = await fetch('http://localhost:5000/api/fix-leak', {
-        //   method: 'POST',
-        // });
-        // if (!fixLeakResponse.ok) throw new Error('Failed to fix leaks');
-        // const fixLeakResult = await fixLeakResponse.json();
-        // toast.success('Leak-fixing completed successfully!', { autoClose: 2000 });
+        const fixLeakResponse = await fetch('http://localhost:5000/api/fix-leak', {
+          method: 'POST',
+        });
+        if (!fixLeakResponse.ok) throw new Error('Failed to fix leaks');
+        const fixLeakResult = await fixLeakResponse.json();
+        toast.success('Leak-fixing completed successfully!', { autoClose: 2000 });
 
         // Step 2: Call get-results
         const resultsResponse = await fetch('http://localhost:5000/api/get-results');
@@ -94,19 +90,18 @@ const FixResults = (): JSX.Element => {
         </Heading>
       </Nav>
 
-      {loading && <Loader show={true} />} {/* Show loader while the process is ongoing */}
+      {loading && <Loader show={true} />} 
+      {/* <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/> */}
 
       {!loading && fixResult && (
         <>
           {fixResult && <FixOverview data={fixResult} />}
-
-          {/* {diffData && <DiffViewer diffs={diffData} />} */}
-
-          <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/>
+         <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/>
         </>
       )}
 
-      {fixResult && <ViewRaw jsonData={fixResult} />}
+      {fixResult && <ViewRaw jsonData={[fixResult]} />}
+
       <Footer />
       <ToastContainer limit={3} draggablePercent={60} autoClose={2500} theme="dark" position="bottom-right" />
     </ResultsOuter>

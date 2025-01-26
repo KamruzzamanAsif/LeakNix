@@ -9,6 +9,7 @@ const diff = require('diff');
 //const Diff2Html = require('diff2html').Diff2Html;
 const { exec } = require('child_process');
 const { parse, html } = require('diff2html'); // Correct usage for diff2html
+const archiver = require('archiver');
 
 // Uploading source code
 // Configure Multer for file uploads
@@ -273,12 +274,12 @@ exports.getDiffs = async (req, res) => {
           const addedLines = parseInt(diffJson[0].addedLines, 10);
 
           if (!isNaN(deletedLines) && !isNaN(addedLines) && (deletedLines !== 0 && addedLines !== 0)) {
-            console.log('Including file:', relativePath);
-            console.log('Deleted lines:', deletedLines);
-            console.log('Added lines:', addedLines);
+            // console.log('Including file:', relativePath);
+            // console.log('Deleted lines:', deletedLines);
+            // console.log('Added lines:', addedLines);
             diffs.push({
               filename: relativePath,
-              fullCode: sourceContent, // Add full code content from the source file
+              fullCode: "", // Add full code content from the source file
               diffJson: diffJson,
               rawDiff: fileDiff,
             });
@@ -292,5 +293,115 @@ exports.getDiffs = async (req, res) => {
   } catch (err) {
     console.error('Error:', err);
     res.status(500).send('Internal Server Error');
+  }
+};
+
+
+///////////////// Final Fix code getting section ////////////////
+// Normalize paths to use forward slashes
+const normalizePath = (filePath) => filePath.replace(/\\/g, '/');
+
+// Recursive function to copy directories
+const copyDirSync = (src, dest) => {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirSync(srcPath, destPath); // Recursively copy subdirectories
+    } else {
+      fs.copyFileSync(srcPath, destPath); // Copy files
+    }
+  }
+};
+
+// Apply accepted changes and download the code as zip file
+exports.applyFixes = async (req, res) => {
+  const { rejectedFiles } = req.body; // Array of rejected file names
+  console.log('Rejected files:', rejectedFiles);
+
+  const sourceDir = path.join(__dirname, '../codes/source_code'); // Path to source code directory
+  const fixedDir = path.join(__dirname, '../codes/fixed_code'); // Path to fixed code directory
+  const finalDir = path.join(__dirname, '../codes/final_code'); // Path to final code directory
+
+  try {
+    // Step 1: Create the final code directory
+    if (fs.existsSync(finalDir)) {
+      fs.rmSync(finalDir, { recursive: true }); // Delete the directory if it exists
+    }
+    fs.mkdirSync(finalDir, { recursive: true });
+
+    // Step 2: Copy all files from the fixed code directory to the final code directory
+    copyDirSync(fixedDir, finalDir);
+
+    // Step 3: Replace files in the final code directory with source code files (if in rejectedFiles list)
+    const replaceFiles = (src, dest) => {
+      const entries = fs.readdirSync(src, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const srcPath = path.join(src, entry.name);
+        const destPath = path.join(dest, entry.name);
+        const relativePath = normalizePath(path.relative(sourceDir, srcPath));
+        
+
+        if (entry.isDirectory()) {
+          replaceFiles(srcPath, destPath); // Recursively process subdirectories
+        } else {
+          // Normalize the rejected file paths for comparison
+          const normalizedRejectedFiles = rejectedFiles.map(normalizePath);
+
+          // console.log('Relative path:', relativePath);
+          // console.log('Normalized rejected files:', normalizedRejectedFiles);
+
+          if (normalizedRejectedFiles.includes(relativePath)) {
+            // Replace the file in the final directory with the one from the source directory
+            console.log('Replacing file:', relativePath);
+            fs.copyFileSync(srcPath, destPath);
+          }
+        }
+      }
+    };
+
+    // Start replacing files from the source directory
+    replaceFiles(sourceDir, finalDir);
+
+    // Step 4: Create a zip archive of the final code directory
+    const zipFilePath = path.join(__dirname, '../codes/final-code.zip');
+    const output = fs.createWriteStream(zipFilePath);
+    const archive = archiver('zip', { zlib: { level: 9 } }); // Compression level
+
+    output.on('close', () => {
+      console.log('Zip file created successfully:', archive.pointer() + ' total bytes');
+
+      // Step 5: Send the zip file to the frontend
+      res.download(zipFilePath, 'final-code.zip', (err) => {
+        if (err) {
+          console.error('Error sending zip file:', err);
+          res.status(500).send('Error sending zip file');
+        } else {
+          console.log('Zip file sent successfully');
+          // Delete the zip file and final directory after sending (optional)
+          fs.unlinkSync(zipFilePath);
+          fs.rmSync(finalDir, { recursive: true });
+        }
+      });
+    });
+
+    archive.on('error', (err) => {
+      throw err;
+    });
+
+    archive.pipe(output);
+    archive.directory(finalDir, false); // Add the final code directory to the zip
+    archive.finalize();
+  } catch (err) {
+    console.error('Error processing files:', err);
+    res.status(500).send('Error processing files');
   }
 };

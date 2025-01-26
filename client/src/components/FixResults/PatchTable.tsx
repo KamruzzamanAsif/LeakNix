@@ -36,13 +36,43 @@ export const PatchTable = ({ data = [] }) => {
   };
 
   // Handle apply patches action
-  const handleApplyPatches = () => {
+  // const handleApplyPatches = () => {
+  //   const rejectedFiles = localData
+  //     .filter((patch) => patch.status === 'Rejected')
+  //     .map((patch) => patch.filename);
+  //   console.log('Rejected files to send to backend:', rejectedFiles);
+  //   // Add logic to send rejectedFiles to the backend
+  //   // If no files are rejected, an empty array will be sent
+  // };
+  const handleApplyPatches = async () => {
     const rejectedFiles = localData
       .filter((patch) => patch.status === 'Rejected')
       .map((patch) => patch.filename);
-    console.log('Rejected files to send to backend:', rejectedFiles);
-    // Add logic to send rejectedFiles to the backend
-    // If no files are rejected, an empty array will be sent
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/apply-fixes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rejectedFiles }),
+      });
+  
+      if (response.ok) {
+        // Trigger the download of the zip file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'fixed-code.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Error applying fixes:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error applying fixes:', error);
+    }
   };
 
   // Handle accept all action

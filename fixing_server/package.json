@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.5.16",
+    "archiver": "^7.0.1",
     "axios": "^1.7.7",
     "capture-website": "^4.1.0",
     "cheerio": "^1.0.0",
