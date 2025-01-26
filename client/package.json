@@ -38,6 +38,7 @@
     "react-router-dom": "^6.26.1",
     "react-simple-maps": "^3.0.0",
     "react-toastify": "^10.0.5",
+    "recharts": "^2.15.0",
     "shadcn-dropzone": "^0.2.1",
     "shadcn-file-upload": "^1.0.2",
     "url": "^0.11.4"

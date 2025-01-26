@@ -39,7 +39,7 @@ const Overview = (jsonData: any) => {
                                 <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Listeners</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
-                                    <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalEventListeners}</span>
+                                    <span className="text-3xl leading-none text-[#c1fb41] font-semibold">{totals?.totalEventListeners}</span>
                                 </div>
                                 <div className="w-auto p-1">
                                     <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">EL</span>
@@ -62,7 +62,7 @@ const Overview = (jsonData: any) => {
                                 <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking DOM Nodes</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
-                                    <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalDomNodes}</span>
+                                    <span className="text-3xl leading-none text-[#c1fb41] font-semibold">{totals?.totalDomNodes}</span>
                                 </div>
                                 <div className="w-auto p-1">
                                     <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">DN</span>
@@ -85,7 +85,7 @@ const Overview = (jsonData: any) => {
                                 <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Collections</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
-                                    <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalCollections}</span>
+                                    <span className="text-3xl leading-none text-[#c1fb41] font-semibold">{totals?.totalCollections}</span>
                                 </div>
                                 <div className="w-auto p-1">
                                     <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">C</span>
@@ -116,7 +116,7 @@ const Overview = (jsonData: any) => {
                                 <h5 className="text-lg text-gray-300 leading-5 font-semibold">Potential Leaking Objects</h5>
                                 <div className="flex flex-wrap items-center -m-1">
                                 <div className="w-auto p-1">
-                                    <span className="text-2xl leading-none text-[#c1fb41] font-semibold">{totals?.totalObjects}</span>
+                                    <span className="text-3xl leading-none text-[#c1fb41] font-semibold">{totals?.totalObjects}</span>
                                 </div>
                                 <div className="w-auto p-1">
                                     <span className="relative bottom-0.5 inline-block py-1 px-2 text-xs text-green-500 font-medium bg-teal-900 rounded-full">O</span>

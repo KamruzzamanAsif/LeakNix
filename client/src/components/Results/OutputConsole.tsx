@@ -31,6 +31,7 @@ const OutputConsole: React.FC<OutputConsoleProps> = ({ url, scenario_used, onJso
         // If JSON file content is received
         if (data.fileContent) {
           const jsonData = JSON.parse(data.fileContent); // Parse the JSON
+          console.log("Json data inside output console: " + jsonData)
           onJsonDataReceived(jsonData); // Pass it to the parent or other components
           setOutput((prev) => prev + 'JSON file content received\n');
         } else {

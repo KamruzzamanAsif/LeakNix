@@ -41,6 +41,10 @@ import {
   parseShodanResults, type ShodanResults
 } from '../utils/result-processor';
 
+import GroupBarChartCard from '../components/LeakStats/GroupBarChartCard';
+import MemoryUsageBarChart from '../components/LeakStats/GroupedBarChart';
+import MemoryUsageRadarChartCard from '../components/LeakStats/MemoryUsageRadarChartCard';
+
 
 const ResultsOuter = styled.div`
   display: flex;
@@ -459,19 +463,22 @@ const Results = (props: { address?: string} ): JSX.Element => {
           </Masonry>
       </ResultsContent> */}
 
+      // This now includes the overview and radar chart both
       <ResultsContent>
-        {jsonData && <OverviewCard title='Overview' data={jsonData} 
-          onRenderComplete={() => setIsOverviewRendered(true)} // Trigger when OverviewCard is rendered
-        />}
+        {jsonData && <MemoryUsageRadarChartCard title={"Result Overview"} data={jsonData} onRenderComplete={() => setIsOverviewRendered(true)} />}
       </ResultsContent>
       
-      
+      <ResultsContent>
+        {jsonData && <GroupBarChartCard title={"Memory Usages"} data={jsonData}></GroupBarChartCard>}
+      </ResultsContent>
+           
       <ResultsContent>
         {jsonData && <GridCard title='Result Table Summary' data={jsonData}/>}
       </ResultsContent>
       
       
-      <ViewRaw jsonData={jsonData} />
+      {jsonData && <ViewRaw jsonData={jsonData} />}
+
       <Footer />
       <Modal isOpen={modalOpen} closeModal={()=> setModalOpen(false)}>{modalContent}</Modal>
       <ToastContainer limit={3} draggablePercent={60} autoClose={2500} theme="dark" position="bottom-right" />

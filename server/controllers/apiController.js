@@ -29,7 +29,7 @@ exports.getDnsRecords = async (req, res) => {
         hostname = hostname.replace('www.', '');
       }
   
-      console.log(`Fetching DNS records for: ${hostname}`);
+      // console.log(`Fetching DNS records for: ${hostname}`);
   
       const dnsRecords = await dnsHandler(hostname);
 

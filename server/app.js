@@ -109,7 +109,7 @@ wss.on('connection', (ws) => {
           setTimeout(() => {
             ws.send('Execution finished. Closing WebSocket.');
             ws.close();
-          }, 50);
+          }, 5000);
         }
       });
 
