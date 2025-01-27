@@ -1,5 +1,5 @@
 {
-    "watch": ["server/**/*.js"],
+    "watch": ["detection_server/**/*.js"],
     "ignore": ["fuite/**/*", "node_modules", "uploads/**/*"]
 }
   
