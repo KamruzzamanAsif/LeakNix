@@ -96,7 +96,7 @@ const FixResults = (): JSX.Element => {
       {!loading && fixResult && (
         <>
           {fixResult && <FixOverview data={fixResult} />}
-         <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/>
+          {(fixResult.countOfleaks?.totalCountOfPotentialLeaks != 0) && <PatchTableCard title={'Detailed Patch Breakdown'} fixResult={fixResult} diffData={diffData}/>}
         </>
       )}
 
