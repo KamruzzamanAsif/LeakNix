@@ -43,23 +43,14 @@ wss.on('connection', (ws) => {
         return;
       }
 
-      // Start the child process using the provided URL
-      // const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\custom-scenario.mjs', '--output', 'fuite\\output', url]);
-      // if(scenario_used){
-      //   const childProcess = spawn('node', ['fuite\\src\\cli.js', '--scenario', 'fuite\\src\\custom-scenario.mjs', '--output', 'fuite\\output', url]);
-      // }
-      // else{
-      //   const childProcess = spawn('node', ['fuite\\src\\cli.js', '--output', 'fuite\\output', url]);
-      // }
-
       // Build the arguments array dynamically
-      const args = ['fuite\\src\\cli.js'];
+      const args = ['detector\\src\\cli.js'];
 
       if (scenario_used) {
-        args.push('--scenario', 'fuite\\src\\custom-scenario.mjs');
+        args.push('--scenario', 'detector\\src\\custom-scenario.mjs');
       }
 
-      args.push('--output', 'fuite\\output', url);
+      args.push('--output', 'detector\\output', url);
 
       // Start the child process using the constructed arguments array
       const childProcess = spawn('node', args);
@@ -94,7 +85,7 @@ wss.on('connection', (ws) => {
           ws.send(`Total time elapsed: ${elapsedTime} seconds.`);
 
           // Read JSON file after process completes
-          const jsonFilePath = path.resolve('fuite/output');
+          const jsonFilePath = path.resolve('detector/output');
           fs.readFile(jsonFilePath, 'utf8', (err, data) => {
             if (err) {
               ws.send(`Error reading JSON file: ${err.message}`);

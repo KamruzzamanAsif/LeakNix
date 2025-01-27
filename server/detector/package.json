@@ -1,5 +1,5 @@
 {
-  "name": "fuite",
+  "name": "detector",
   "version": "5.0.4",
   "description": "A tool for finding memory leaks in web apps",
   "type": "module",
@@ -58,19 +58,6 @@
     "leak",
     "detector"
   ],
-  "author": "Nolan Lawson <nolan@nolanlawson.com>",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nolanlawson/fuite.git"
-  },
-  "bugs": {
-    "url": "https://github.com/nolanlawson/fuite/issues"
-  },
-  "homepage": "https://github.com/nolanlawson/fuite#readme",
-  "engines": {
-    "node": ">= 18.0.0"
-  },
   "standard": {
     "ignore": [
       "thirdparty"
