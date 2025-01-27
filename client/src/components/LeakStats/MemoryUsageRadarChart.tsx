@@ -127,6 +127,8 @@ export default function AverageMemoryGrowthRadarChart({ jsonData }: MemoryUsageR
   const totalAverageGrowth = (totalAfter - totalBefore) / 1024; // Convert to KB
   const totalAverageGrowthPercentage = ((totalAverageGrowth / (totalBefore / 1024)) * 100).toFixed(2);
 
+  const totalAfterSum = jsonData.reduce((sum, entry) => sum + entry.result.after.statistics.total, 0) / 1024;
+
   // Custom tooltip formatter to display values in a human-readable format
   const renderTooltipContent = (props: any) => {
     const { active, payload } = props;
@@ -181,10 +183,10 @@ export default function AverageMemoryGrowthRadarChart({ jsonData }: MemoryUsageR
         }}
       >
         <h4 style={{ color: 'white', margin: '0', fontSize: '18px', fontWeight: 'bold' }}>
-          Total Average Memory Growth
+          Total Memory Across all Tests
         </h4>
         <p style={{ color: '#ffa500', fontSize: '24px', fontWeight: 'bold', margin: '8px 0 0' }}>
-          {prettyBytes(totalAverageGrowth * 1024)} ({totalAverageGrowthPercentage}%)
+          {prettyBytes(totalAfterSum * 1024)} 
         </p>
       </div>
 

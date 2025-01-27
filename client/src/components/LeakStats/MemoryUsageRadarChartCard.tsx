@@ -54,7 +54,7 @@ const MemoryUsageRadarChartCard = (props: { title: string, data: any, onRenderCo
 
   return (
     <Card heading={props.title} styles={cardStyles}>
-        <Overview jsonData={props.data}/>        
+        {/* <Overview jsonData={props.data}/>         */}
        <AverageMemoryGrowthRadarChart jsonData={props.data}></AverageMemoryGrowthRadarChart>
     </Card>
   );

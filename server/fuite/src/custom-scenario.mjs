@@ -20,13 +20,30 @@ export async function createTests(page) {
       },
       description: "Navigate and click on How we work and back"
     },
-    // {
-    //   data: {
-    //     href: "/page2",
-    //     fullHref: "http://localhost:3000/page2"
-    //   },
-    //   description: "Go to /page2 and back"
-    // }
+    {
+        data: {
+          selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[3]',
+        },
+        description: "Navigate and click on Project and back"
+      },
+      {
+        data: {
+          selector: '//*[@id="__next"]/div/div/div/div[2]/footer/div/div[2]/div[2]/div/p[7]',
+        },
+        description: "Navigate to Blog and back"
+      },
+      {
+        data: {
+          selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[4]',
+        },
+        description: "Navigate and click on About and back"
+      },
+      {
+        data: {
+          selector: '//*[@id="__next"]/div/div/div/div[2]/section[1]/div[2]/button[1]',
+        },
+        description: "Navigate and click on Send Quote and back"
+      },
   ];
 }
 

@@ -8,8 +8,8 @@
         "refactoring": {
             "filesRefactoredForTimingEventLeak": [
                 "fixed_code\\react-event-listeners\\src\\Page2.js",
-                "fixed_code\\react-event-listeners\\src\\Page1.js",
-                "fixed_code\\react-event-listeners\\src\\Page3.js"
+                "fixed_code\\react-event-listeners\\src\\Page3.js",
+                "fixed_code\\react-event-listeners\\src\\Page1.js"
             ],
             "filesRefactoredForEventListenerLeak": [
                 "fixed_code\\react-event-listeners\\src\\Page1.js"
