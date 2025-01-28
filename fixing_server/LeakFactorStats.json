@@ -1,20 +1,19 @@
 {
     "memoryLeakFixResults": {
         "countOfleaks": {
-            "countOfTimingEventLeaks": 3,
-            "countOfEventListenerLeaks": 1,
-            "totalCountOfPotentialLeaks": 4
+            "countOfEventListenerLeaks": 7,
+            "totalCountOfPotentialLeaks": 7
         },
         "refactoring": {
-            "filesRefactoredForTimingEventLeak": [
-                "fixed_code\\react-event-listeners\\src\\Page2.js",
-                "fixed_code\\react-event-listeners\\src\\Page1.js",
-                "fixed_code\\react-event-listeners\\src\\Page3.js"
-            ],
             "filesRefactoredForEventListenerLeak": [
-                "fixed_code\\react-event-listeners\\src\\Page1.js"
+                "fixed_code\\collosal\\components\\organisms\\NavBar\\index.tsx",
+                "fixed_code\\collosal\\hooks\\useMobileDetection.tsx",
+                "fixed_code\\collosal\\hooks\\useGetBrowserName.tsx",
+                "fixed_code\\collosal\\components\\molecules\\Card\\BlogCard\\index.tsx",
+                "fixed_code\\collosal\\pages\\blog\\detail\\index.tsx",
+                "fixed_code\\collosal\\components\\molecules\\Card\\TeamCard\\index.tsx"
             ],
-            "totalFilesRefactored": 3
+            "totalFilesRefactored": 6
         }
     }
 }

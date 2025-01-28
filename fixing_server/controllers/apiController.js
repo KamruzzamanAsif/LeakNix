@@ -139,7 +139,7 @@ exports.fixLeak = async (req, res) => {
         // step 2:
         // fix the code
         // Ensure LeakPair directory and target directory are correctly defined
-        const leakPairDir = path.join(__dirname, '../LeakPair'); // Path to LeakPair directory
+        const fixingCoreDir = path.join(__dirname, '../fixing_core'); // Path to LeakPair directory
         const targetDir = path.join(__dirname, '../codes/fixed_code');; // Path to target directory
 
         // Use the global npx path or ensure it is installed
@@ -149,7 +149,7 @@ exports.fixLeak = async (req, res) => {
         const result_path = path.join(__dirname, '../');
 
         // Spawn the child process to execute the command
-        const child = spawn(npxPath, ['leakpair', targetDir, result_path], { cwd: leakPairDir }); // cwd changes working directory
+        const child = spawn(npxPath, ['leakpair', targetDir, result_path], { cwd: fixingCoreDir }); // cwd changes working directory
 
         // Capture stdout
         child.stdout.on('data', (data) => {
@@ -243,6 +243,16 @@ const getAllFiles = (dirPath, basePath = '') => {
   return files;
 };
 
+// Helper function to normalize line endings
+const normalizeLineEndings = (content) => {
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+};
+
+// Helper function to ignore whitespace changes
+const ignoreWhitespace = (content) => {
+  return content.split('\n').map(line => line.trim()).join('\n');
+};
+
 exports.getDiffs = async (req, res) => {
   try {
     const sourceFolder = path.join(__dirname, '../codes/source_code');
@@ -260,11 +270,25 @@ exports.getDiffs = async (req, res) => {
       if (fs.existsSync(sourceFilePath) && fs.statSync(sourceFilePath).isFile()) {
         if (fs.existsSync(fixedFilePath) && fs.statSync(fixedFilePath).isFile()) {
           // Read file contents
-          const sourceContent = fs.readFileSync(sourceFilePath, 'utf8');
-          const fixedContent = fs.readFileSync(fixedFilePath, 'utf8');
+          let sourceContent = fs.readFileSync(sourceFilePath, 'utf8');
+          let fixedContent = fs.readFileSync(fixedFilePath, 'utf8');
+
+          // Normalize line endings and ignore whitespace changes
+          sourceContent = normalizeLineEndings(sourceContent);
+          fixedContent = normalizeLineEndings(fixedContent);
+
+          // Generate unified diff (ignore whitespace changes)
+          const fileDiff = diff.createPatch(
+            relativePath,
+            ignoreWhitespace(sourceContent),
+            ignoreWhitespace(fixedContent),
+            'Source',
+            'Fixed',
+            { ignoreWhitespace: true }
+          );
 
           // Generate unified diff
-          const fileDiff = diff.createPatch(relativePath, sourceContent, fixedContent);
+          // const fileDiff = diff.createPatch(relativePath, sourceContent, fixedContent);
           
           // Parse the diff into a format diff2html understands
           const diffJson = parse(fileDiff);
