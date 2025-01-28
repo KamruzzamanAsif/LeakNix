@@ -183,7 +183,7 @@ export default function AverageMemoryGrowthRadarChart({ jsonData }: MemoryUsageR
         }}
       >
         <h4 style={{ color: 'white', margin: '0', fontSize: '18px', fontWeight: 'bold' }}>
-          Total Memory Across all Tests
+          Total Memory Across all Interactions
         </h4>
         <p style={{ color: '#ffa500', fontSize: '24px', fontWeight: 'bold', margin: '8px 0 0' }}>
           {prettyBytes(totalAfterSum * 1024)} 

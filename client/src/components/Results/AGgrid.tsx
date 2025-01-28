@@ -50,7 +50,7 @@ const AGgrid = ({
   // Combine data into a unified table format
   const rowData = useMemo(() => {
     const objects = objectsData.map((obj) => ({
-      test: obj.test,
+      interaction: obj.interaction,
       category: "Objects",
       type: obj.type,
       addedCount: obj.addedCount,
@@ -58,7 +58,7 @@ const AGgrid = ({
     }));
 
     const eventListeners = eventListenerData.map((listener) => ({
-      test: listener.test,
+      interaction: listener.interaction,
       category: "Event Listeners",
       type: listener.type,
       addedCount: listener.addedCount,
@@ -67,7 +67,7 @@ const AGgrid = ({
     }));
 
     const domNodes = domNodesData.map((node) => ({
-      test: node.test,
+      interaction: node.interaction,
       category: "DOM Nodes",
       type: 'N/A',
       addedCount: node.addedCount,
@@ -76,7 +76,7 @@ const AGgrid = ({
     }));
 
     const collections = collectionsData.map((collection) => ({
-      test: collection.test,
+      interaction: collection.interaction,
       category: "Collections",
       type: collection.type,
       addedCount: collection.addedCount,
@@ -90,7 +90,7 @@ const AGgrid = ({
   // Define columns
   const colDefs: ColDef[] = useMemo(() => {
     return [
-      { field: "test", headerName: "Test", width: 100 },
+      { field: "interaction", headerName: "Interaction", width: 100 },
       { field: "category", headerName: "Category", width: 150 },
       { field: "type", headerName: "Type/Name", width: 250 },
       { field: "addedCount", headerName: "Delta", width: 150 },

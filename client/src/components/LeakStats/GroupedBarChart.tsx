@@ -12,7 +12,7 @@ export default function MemoryUsageBarChart({ jsonData }: { jsonData: any }) {
     const toKB = (bytes: number) => bytes / 1024;
 
     return {
-      name: `Test ${index + 1}`, // Test label
+      name: `Interaction ${index + 1}`, // Test label
       // Before statistics (in kB)
       totalBefore: toKB(before.total),
       v8heapBefore: toKB(before.v8heap),

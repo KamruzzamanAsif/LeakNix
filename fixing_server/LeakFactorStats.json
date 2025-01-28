@@ -1,19 +1,44 @@
 {
     "memoryLeakFixResults": {
         "countOfleaks": {
-            "countOfEventListenerLeaks": 7,
-            "totalCountOfPotentialLeaks": 7
+            "countOfTimingEventLeaks": 42,
+            "countOfEventListenerLeaks": 12,
+            "totalCountOfPotentialLeaks": 54
         },
         "refactoring": {
-            "filesRefactoredForEventListenerLeak": [
-                "fixed_code\\collosal\\components\\organisms\\NavBar\\index.tsx",
-                "fixed_code\\collosal\\hooks\\useMobileDetection.tsx",
-                "fixed_code\\collosal\\hooks\\useGetBrowserName.tsx",
-                "fixed_code\\collosal\\components\\molecules\\Card\\BlogCard\\index.tsx",
-                "fixed_code\\collosal\\pages\\blog\\detail\\index.tsx",
-                "fixed_code\\collosal\\components\\molecules\\Card\\TeamCard\\index.tsx"
+            "filesRefactoredForTimingEventLeak": [
+                "fixed_code\\retail-ui-next\\packages\\react-ui-validations\\src\\ValidationWrapperInternal.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Calendar\\Calendar.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\.storybook\\Meta.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui-validations\\.storybook\\Meta.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui-validations\\stories\\SyncStories\\SingleInputPage.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\internal\\FocusControlWrapper\\FocusControlWrapper.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui-validations\\stories\\SyncStories\\LostfocusDependentValidation.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Input\\Input.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\hooks\\useDrop.ts",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\.storybook\\docsPages\\Locale\\Locale.docs.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\internal\\InputLikeText\\InputLikeText.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Toast\\Toast.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\DatePicker\\MobilePicker.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Button\\__docs__\\Button.docs.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\GlobalLoader\\__stories__\\GlobalLoader.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\TokenInput\\__docs__\\TokenInput.docs.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui-testing\\TestPages\\src\\components\\TestPages\\AutocompleteTestPage.jsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui-testing\\TestPages\\src\\components\\TestPages\\InputTestPage.jsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\ComboBox\\__stories__\\Combobox.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\MiniModal\\__docs__\\MiniModal.docs.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\ComboBox\\__docs__\\ComboBox.docs.stories.tsx"
             ],
-            "totalFilesRefactored": 6
+            "filesRefactoredForEventListenerLeak": [
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\internal\\ResizeDetector\\ResizeDetector.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Calendar\\Calendar.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\internal\\FocusControlWrapper\\FocusControlWrapper.stories.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\ScrollContainer\\ScrollBar.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\internal\\IgnoreLayerClick\\IgnoreLayerClick.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\ScrollContainer\\ScrollContainer.tsx",
+                "fixed_code\\retail-ui-next\\packages\\react-ui\\components\\Select\\Select.tsx"
+            ],
+            "totalFilesRefactored": 26
         }
     }
 }

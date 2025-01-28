@@ -43,9 +43,9 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
     let testCounter = 1;
 
     data.forEach((entry: any) => {
-      const test_name = `Test ${testCounter++}`;
+      const test_name = `Interaction ${testCounter++}`;
       const objects = entry?.result?.leaks?.objects.map(({ name, retainedSizeDeltaPerIteration, countDeltaPerIteration }) => ({
-        test: test_name,
+        interaction: test_name,
         type: name,
         addedCount: countDeltaPerIteration,
         retainedSize: prettyBytes(retainedSizeDeltaPerIteration),
@@ -62,9 +62,9 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
     let testCounter = 1;
 
     data.forEach((entry: any) => {
-      const test_name = `Test ${testCounter++}`;
+      const test_name = `Interaction ${testCounter++}`;
       const eventListerns = entry?.result?.leaks?.eventListeners.map(({ type, deltaPerIteration, leakingNodes }) => ({
-        test: test_name,
+        interaction: test_name,
         type,
         addedCount: deltaPerIteration,
         nodes: leakingNodes.map(({ description, nodeCountDeltaPerIteration }) => `${description} (+${nodeCountDeltaPerIteration})`).join(', '),
@@ -81,9 +81,9 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
     let testCounter = 1;
 
     data.forEach((entry: any) => {
-      const test_name = `Test ${testCounter++}`;
+      const test_name = `Interaction ${testCounter++}`;
       const dom_nodes = entry?.result?.leaks?.domNodes.nodes.map(({ description, deltaPerIteration }) => ({
-        test: test_name,
+        interaction: test_name,
         type: description,
         addedCount: deltaPerIteration,
       }));
@@ -99,9 +99,9 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
     let testCounter = 1;
 
     data.forEach((entry: any) => {
-      const test_name = `Test ${testCounter++}`;
+      const test_name = `Interaction ${testCounter++}`;
       const collections = entry?.result?.leaks?.collections.map(({ type, deltaPerIteration, preview, stacktraces }) => ({
-        test: test_name,
+        interaction: test_name,
         type,
         addedCount: deltaPerIteration,
         preview: preview,
