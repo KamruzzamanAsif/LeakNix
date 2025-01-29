@@ -256,7 +256,7 @@ exports.getPorts = async (req, res) => {
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '../fuite/src'); // Define upload directory
+    const uploadDir = path.join(__dirname, '../detector/src'); // Define upload directory
     // if not exists, create the directory
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);

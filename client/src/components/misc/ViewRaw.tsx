@@ -50,7 +50,7 @@ const ViewRaw = (props: { jsonData: any[] }) => {
   
     if (Array.isArray(props.jsonData)) {
       props.jsonData.forEach((item, index) => {
-        result[`test_${index + 1}`] = item; // Use index as the key
+        result[`${index + 1}`] = item; // Use index as the key
       });
     } else {
       console.error('jsonData is not a valid array of objects:', props.jsonData);

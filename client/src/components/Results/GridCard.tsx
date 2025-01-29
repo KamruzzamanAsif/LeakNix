@@ -34,22 +34,32 @@ const cardStyles = `
   }
 `;
 
-
-
 const GridCard = (props: { title: string, data: any}): JSX.Element => {
 
-  const calculateObjectsData = (data: any) => {
+  const calculateObjectsData = (data: any, collections_data: any[]) => {
     let objects_data: any[] = [];
     let testCounter = 1;
 
     data.forEach((entry: any) => {
       const test_name = `Interaction ${testCounter++}`;
-      const objects = entry?.result?.leaks?.objects.map(({ name, retainedSizeDeltaPerIteration, countDeltaPerIteration }) => ({
-        interaction: test_name,
-        type: name,
-        addedCount: countDeltaPerIteration,
-        retainedSize: prettyBytes(retainedSizeDeltaPerIteration),
-      }));
+      const objects = entry?.result?.leaks?.objects.map(({ name, retainedSizeDeltaPerIteration, countDeltaPerIteration }) => {
+        if (name === "Array") {
+          // Add to collections_data if the object is an Array
+          collections_data.push({
+            interaction: test_name,
+            type: name,
+            addedCount: countDeltaPerIteration,
+            preview: "N/A", // You can adjust this as needed
+            sizeIncreasedAt: "N/A", // You can adjust this as needed
+          });
+        }
+        return {
+          interaction: test_name,
+          type: name,
+          addedCount: countDeltaPerIteration,
+          retainedSize: prettyBytes(retainedSizeDeltaPerIteration),
+        };
+      });
       objects_data = objects_data.concat(objects);
     });
 
@@ -114,10 +124,17 @@ const GridCard = (props: { title: string, data: any}): JSX.Element => {
     return { collections_data };
   };
 
-  const { objects_data } = calculateObjectsData(props.data);
+  // Initialize collections_data
+  let collections_data: any[] = [];
+
+  // Calculate data
+  const { objects_data } = calculateObjectsData(props.data, collections_data);
   const { event_listener_data } = calculateEventListenerData(props.data);
   const { dom_nodes_data } = calculateDOMNodesData(props.data);
-  const { collections_data } = calculateCollectionsData(props.data);
+  const { collections_data: collectionsData } = calculateCollectionsData(props.data);
+
+  // Combine collections_data from both sources
+  collections_data = collections_data.concat(collectionsData);
 
   return (
     <Card heading={props.title} styles={cardStyles}>

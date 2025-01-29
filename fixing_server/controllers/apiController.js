@@ -292,12 +292,13 @@ exports.getDiffs = async (req, res) => {
           
           // Parse the diff into a format diff2html understands
           const diffJson = parse(fileDiff);
+          
 
           // Push both full code content and diff to the response and only the changed files
           const deletedLines = parseInt(diffJson[0].deletedLines, 10);
           const addedLines = parseInt(diffJson[0].addedLines, 10);
 
-          if (!isNaN(deletedLines) && !isNaN(addedLines) && (deletedLines !== 0 && addedLines !== 0)) {
+          if (!isNaN(deletedLines) && !isNaN(addedLines) && (deletedLines !== 0 || addedLines !== 0))  {
             // console.log('Including file:', relativePath);
             // console.log('Deleted lines:', deletedLines);
             // console.log('Added lines:', addedLines);
