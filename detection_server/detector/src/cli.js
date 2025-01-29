@@ -22,10 +22,6 @@ program
   .option('-i, --iterations <number>', 'Number of iterations', DEFAULT_ITERATIONS)
   .option('-H, --heapsnapshot', 'Save heapsnapshot files')
   .option('-s, --scenario <scenario>', 'Scenario file to run')
-  .option('-S, --setup <setup>', 'Setup function to run (e.g. in the default scenario)')
-  .option('-d, --debug', 'Run in debug mode')
-  .option('-p, --progress', 'Show progress spinner (--no-progress to disable)', true)
-  .option('-b, --browser-arg <arg>', 'Arg(s) to pass when launching the browser', parseAsArray)
   .version(version)
 program.parse(process.argv)
 const options = program.opts()
@@ -68,7 +64,7 @@ ${chalk.blue('Output')}    : ${outputFilename}
 
   const iterations = parseInt(options.iterations, 10)
   const { debug, heapsnapshot, progress, browserArg: browserArgs } = options
-  console.log(chalk.blue('TEST RESULTS') + '\n\n' + '-'.repeat(20) + '\n')
+  console.log(chalk.blue('Interaction RESULTS') + '\n\n' + '-'.repeat(20) + '\n')
   let writeCount = 0
   const writeStream = outputFilename && createWriteStream(outputFilename, 'utf8')
   if (writeStream) {

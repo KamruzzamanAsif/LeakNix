@@ -1,19 +1,20 @@
 {
     "memoryLeakFixResults": {
         "countOfleaks": {
-            "countOfEventListenerLeaks": 7,
-            "totalCountOfPotentialLeaks": 7
+            "countOfTimingEventLeaks": 3,
+            "countOfEventListenerLeaks": 1,
+            "totalCountOfPotentialLeaks": 4
         },
         "refactoring": {
-            "filesRefactoredForEventListenerLeak": [
-                "fixed_code\\collosal\\pages\\blog\\detail\\index.tsx",
-                "fixed_code\\collosal\\hooks\\useMobileDetection.tsx",
-                "fixed_code\\collosal\\hooks\\useGetBrowserName.tsx",
-                "fixed_code\\collosal\\components\\molecules\\Card\\TeamCard\\index.tsx",
-                "fixed_code\\collosal\\components\\organisms\\NavBar\\index.tsx",
-                "fixed_code\\collosal\\components\\molecules\\Card\\BlogCard\\index.tsx"
+            "filesRefactoredForTimingEventLeak": [
+                "fixed_code\\employee_hub\\src\\Notification.js",
+                "fixed_code\\employee_hub\\src\\Monitor.js",
+                "fixed_code\\employee_hub\\src\\EmployeeDirectory.js"
             ],
-            "totalFilesRefactored": 6
+            "filesRefactoredForEventListenerLeak": [
+                "fixed_code\\employee_hub\\src\\EmployeeDirectory.js"
+            ],
+            "totalFilesRefactored": 3
         }
     }
 }

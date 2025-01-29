@@ -203,7 +203,7 @@ export async function * findLeaks (pageUrl, options = {}) {
 
   const runIteration = async (test, i, numTests) => {
     try {
-      const prefix = `Test ${i + 1}/${numTests}${test.description ? ` - ${test.description}` : ''} -`
+      const prefix = `Interaction ${i + 1}/${numTests}${test.description ? ` - ${test.description}` : ''} -`
       return (await runWithSpinner(progress, async (onProgress) => {
         const onProgressWithPrefix = message => {
           onProgress(`${prefix} ${message}`)

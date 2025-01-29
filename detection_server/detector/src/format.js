@@ -114,7 +114,7 @@ ${formatTable(tableData)}
 export function formatResult ({ test, result }) {
   let str = ''
 
-  str += `Test         : ${chalk.blue(test.description)}\n`
+  str += `Interaction         : ${chalk.blue(test.description)}\n`
 
   if (result.failed) {
     str += `Failed       : ${result.error.message}\n${result.error.stack}\n`
