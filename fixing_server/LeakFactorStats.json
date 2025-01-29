@@ -7,8 +7,8 @@
         },
         "refactoring": {
             "filesRefactoredForTimingEventLeak": [
-                "fixed_code\\employee_hub\\src\\Notification.js",
                 "fixed_code\\employee_hub\\src\\Monitor.js",
+                "fixed_code\\employee_hub\\src\\Notification.js",
                 "fixed_code\\employee_hub\\src\\EmployeeDirectory.js"
             ],
             "filesRefactoredForEventListenerLeak": [

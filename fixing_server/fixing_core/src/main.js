@@ -3,7 +3,7 @@ import { parse, print } from 'recast';
 import { transformFromAstSync, parseSync } from '@babel/core';
 import path from 'path';
 import { LeakFactorStats } from '../LeakFactorStats';
-import mainPlugin from './plugins/mainPlugin';
+import mainPlugin from './PatchGenerator/mainPlugin';
 
 export default function jsCodeShift(file, api, options) {
   const transformedSource = babelRecast(file.source, file.path, options);
