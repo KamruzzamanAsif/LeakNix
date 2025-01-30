@@ -3,9 +3,9 @@ import * as defaultScenario from './defaultScenario.js'
 import { defaultWaitForPageIdle } from './puppeteerUtil.js'
 import ora from 'ora'
 import { serial } from './util.js'
-import { collectionsMetric } from './metrics/collections/index.js'
-import { domNodesAndListenersMetric } from './metrics/domNodesAndListeners/index.js'
-import { heapsnapshotsMetric } from './metrics/heapsnapshots/index.js'
+import { collectionsMetric } from './HeapSnapshotAnalysis/collections/index.js'
+import { domNodesAndListenersMetric } from './HeapSnapshotAnalysis/domNodesAndListeners/index.js'
+import { heapsnapshotsMetric } from './HeapSnapshotAnalysis/heapsnapshots/index.js'
 import { setCustomWaitForPageIdle } from './customWaitForPageIdle.js'
 
 // Maximum 32-bit signed integer, for sending CDP a high enough timeout
