@@ -1,5 +1,5 @@
 // myScenario.mjs
-import { defaultWaitForPageIdle } from './puppeteerUtil.js';
+import { defaultWaitForPageIdle } from './puppeteerUtil.js'
 
 /**
  * OPTIONAL: Setup code to run before each test
@@ -10,72 +10,36 @@ export async function createTests(page) {
   return [
     {
       data: {
-        selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[1]',
+        href: "/about-us",
+        fullHref: "https://www.shohoz.com/about-us"
       },
-      description: "Navigate and click on Service and back"
+      description: "Go to /employee and back"
     },
-    {
-      data: {
-        selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[2]',
-      },
-      description: "Navigate and click on How we work and back"
-    },
-    // {
-    //     data: {
-    //       selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[3]',
-    //     },
-    //     description: "Navigate and click on Project and back"
-    //   },
-    //   {
-    //     data: {
-    //       selector: '//*[@id="__next"]/div/div/div/div[2]/footer/div/div[2]/div[2]/div/p[7]',
-    //     },
-    //     description: "Navigate to Blog and back"
-    //   },
-    //   {
-    //     data: {
-    //       selector: '//*[@id="__next"]/nav/div/div/div/div[2]/p[4]',
-    //     },
-    //     description: "Navigate and click on About and back"
-    //   },
-    //   {
-    //     data: {
-    //       selector: '//*[@id="__next"]/div/div/div/div[2]/section[1]/div[2]/button[1]',
-    //     },
-    //     description: "Navigate and click on Send Quote and back"
-    //   },
   ];
 }
 
 
-async function clickFirstVisible(page, xpath) {
-  const element = await page.evaluateHandle((xpath) => {
-    const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-    const element = result.singleNodeValue;
+async function clickFirstVisible(page, selector) {
+    const element = await page.evaluateHandle((selector) => {
+        return [...document.querySelectorAll(selector)].filter(el => {
+          // avoid links that open in a new tab
+          return el.target === '' &&
+            // quick and dirty visibility check
+            window.getComputedStyle(el).getPropertyValue('display') !== 'none' &&
+            window.getComputedStyle(el).getPropertyValue('visibility') !== 'hidden' &&
+            el.offsetHeight > 0 &&
+            el.offsetWidth > 0
+        })[0]
+    }, selector)
 
-    // Check if element is visible
-    if (element && 
-        window.getComputedStyle(element).getPropertyValue('display') !== 'none' && 
-        window.getComputedStyle(element).getPropertyValue('visibility') !== 'hidden' && 
-        element.offsetHeight > 0 && 
-        element.offsetWidth > 0) {
-      return element;
-    }
-
-    return null; // No visible element found
-  }, xpath);
-
-  if (element) {
     try {
-      await element.click();
-    } catch (err) {
-      throw new Error(`Element with XPath ${xpath} is not clickable or is not an in-page SPA navigation: ${err.message}`);
-    } finally {
-      await element.dispose();
-    }
-  } else {
-    console.log(`No visible element found for XPath: ${xpath}`);
-  }
+        await element.click()
+      } catch (err) {
+        throw ono(err, `Element ${selector} is not clickable or is not an in-page SPA navigation`)
+      }
+      finally {
+        await element.dispose()
+      }
 }
 
 
@@ -87,7 +51,7 @@ async function clickFirstVisible(page, xpath) {
  * @param { any } data
  */
 export async function iteration(page, data) {
-    await clickFirstVisible(page, data.selector)
+    await clickFirstVisible(page, `a[href=${JSON.stringify(data.href)}]`)
     await defaultWaitForPageIdle(page)
     await page.goBack()
     await defaultWaitForPageIdle(page)
